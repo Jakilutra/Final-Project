@@ -25,12 +25,13 @@ public class playerScript : MonoBehaviour
         { Color.blue, Color.white }
     };
 
-
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
         activeColor = Color.white;
         render = GetComponent<SpriteRenderer>();
+        FindObjectOfType<gameManager>().GameOver();
+
     }
 
     void Update()
@@ -42,8 +43,8 @@ public class playerScript : MonoBehaviour
         {
             if (colorChange.TryGetValue(activeColor, out Color newColor))
             {
-                activeColor = colorChange[activeColor];
-                render.color = activeColor;
+                activeColor = newColor;
+                render.color = newColor;
             }
         }
     }
