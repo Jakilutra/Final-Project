@@ -1,3 +1,3 @@
 # Final-Project
 
-Final Project for the Digital Arts Foundation Degree at Solent University.
+Final Project on Unity for the Digital Arts Foundation Degree at Solent University.
