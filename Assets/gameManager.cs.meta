@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - GameOverPanel: {fileID: 2939084389548647135, guid: 2aed45607a2e17a4cab0d3803b722eb6,
+  - GameOverPanel: {fileID: 1040655420019264438, guid: 2aed45607a2e17a4cab0d3803b722eb6,
       type: 3}
   executionOrder: 0
   icon: {instanceID: 0}

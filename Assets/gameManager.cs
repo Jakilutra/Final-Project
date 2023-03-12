@@ -3,24 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class gameManager : MonoBehaviour
+ public class GameManager : MonoBehaviour
 {
-    bool gamehasEnded = true;
+    bool gamehasEnded = false;
 
+    public GameObject Floor;
     public GameObject GameOverPanel;
+    public GameObject Player;
 
     public void GameOver()
     {
-        if (gamehasEnded == true)
+        if (!gamehasEnded)
         {
             gamehasEnded = true;
-            GameOverPanel.SetActive(true);
-            Restart();
 
-            void Restart()
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
+            Floor.SetActive(false);
+            GameOverPanel.SetActive(true);
+            Player.SetActive(false);
+        }
+    }
+
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+          Restart();
         }
     }
 }

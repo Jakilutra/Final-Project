@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerScript : MonoBehaviour
+public class PlayerScript : MonoBehaviour
 {
+
     // Declare Player Physics/Movement Variables
+
     Rigidbody2D body;
 
     float horizontal;
@@ -14,30 +16,45 @@ public class playerScript : MonoBehaviour
 
     // Declare Player Colour Variables
 
-    SpriteRenderer render;
     Color activeColor;
+    SpriteRenderer render;
+    Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
+    Color colorGreen = new Color(0.25f, 1f, 0.25f);
+    Color colorRed = new Color(1f, 0.25f, 0.25f);
+    Color colorBlue = new Color(0.25f, 0.25f, 1f);
 
-    Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>
+    // Finishes Setting of Player Colour Variables
+
+    void ColorChangeSetUp()
     {
-        { Color.white, Color.green },
-        { Color.green, Color.red },
-        { Color.red, Color.blue },
-        { Color.blue, Color.white }
-    };
+        activeColor = Color.white;
+        render = GetComponent<SpriteRenderer>();
+        colorChange = new Dictionary<Color, Color>
+        {
+            { Color.white, colorGreen },
+            { colorGreen, colorRed },
+            { colorRed, colorBlue },
+            { colorBlue, Color.white }
+        };
+    }
+
+    // StartUp
 
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
-        activeColor = Color.white;
-        render = GetComponent<SpriteRenderer>();
-        FindObjectOfType<gameManager>().GameOver();
+        ColorChangeSetUp();
 
     }
+
+    // Tick
 
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
+
+        // Color Change Event
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -46,6 +63,13 @@ public class playerScript : MonoBehaviour
                 activeColor = newColor;
                 render.color = newColor;
             }
+        }
+
+        // Game Over Event
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            FindObjectOfType<GameManager>().GameOver();
         }
     }
 
