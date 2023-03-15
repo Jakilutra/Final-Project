@@ -9,19 +9,19 @@ public class PlayerScript : MonoBehaviour
 
     Rigidbody2D body;
 
-    float horizontal;
-    float vertical;
+    private float horizontal;
+    private float vertical;
 
-    float runSpeed = 5.0f;
+    private float runSpeed = 5.0f;
 
     // Declare Player Colour Variables
 
-    Color activeColor;
-    SpriteRenderer render;
-    Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
-    Color colorGreen = new Color(0.25f, 1f, 0.25f);
-    Color colorRed = new Color(1f, 0.25f, 0.25f);
-    Color colorBlue = new Color(0.25f, 0.25f, 1f);
+    private Color activeColor;
+    private SpriteRenderer render;
+    private Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
+    private Color colorGreen = new Color(0.25f, 1f, 0.25f);
+    private Color colorRed = new Color(1f, 0.25f, 0.25f);
+    private Color colorBlue = new Color(0.25f, 0.25f, 1f);
 
     // Finishes Setting of Player Colour Variables
 
@@ -47,6 +47,18 @@ public class PlayerScript : MonoBehaviour
 
     }
 
+    // Collision
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Enemy")
+        {
+
+            // Game Over Event
+            FindObjectOfType<GameManager>().GameOver();
+        }
+    }
+
     // Tick
 
     void Update()
@@ -63,13 +75,6 @@ public class PlayerScript : MonoBehaviour
                 activeColor = newColor;
                 render.color = newColor;
             }
-        }
-
-        // Game Over Event
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            FindObjectOfType<GameManager>().GameOver();
         }
     }
 

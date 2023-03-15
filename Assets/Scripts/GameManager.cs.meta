@@ -4,7 +4,11 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - Enemy: {fileID: 6706475965447576341, guid: e66b9d530adff694fb5f433da4843a3f, type: 3}
+  - Floor: {fileID: 3350744268185763616, guid: 708a28add9283b44c8276bd3cece01cd, type: 3}
   - GameOverPanel: {fileID: 1040655420019264438, guid: 2aed45607a2e17a4cab0d3803b722eb6,
+      type: 3}
+  - Player: {fileID: 7900018026892921156, guid: 17d66c184bcc30f46bf9d0c123b7b84a,
       type: 3}
   executionOrder: 0
   icon: {instanceID: 0}

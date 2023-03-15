@@ -10,6 +10,7 @@ public class GameOverScript : MonoBehaviour
         {
             FindObjectOfType<GameManager>().GameOver(); // Call GameOver function in GameManager
             FindObjectOfType<PlayerScript>().enabled = false; // Disable Player Script when Game Over.
+            FindObjectOfType<EnemyScript>().enabled = false; // Disable Player Script when Game Over.
         }
     }
 }

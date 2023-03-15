@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 {
     bool gamehasEnded = false;
 
+    public GameObject Enemy;
     public GameObject Floor;
     public GameObject GameOverPanel;
     public GameObject Player;
@@ -17,6 +18,7 @@ using UnityEngine.SceneManagement;
         {
             gamehasEnded = true;
 
+            Enemy.SetActive(false);
             Floor.SetActive(false);
             GameOverPanel.SetActive(true);
             Player.SetActive(false);
