@@ -7,10 +7,15 @@ using UnityEngine.SceneManagement;
 {
     bool gamehasEnded = false;
 
-    public GameObject Enemy;
+    public GameObject[] enemies;
     public GameObject Floor;
     public GameObject GameOverPanel;
     public GameObject Player;
+
+    void Start()
+    {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    }
 
     public void GameOver()
     {
@@ -18,6 +23,10 @@ using UnityEngine.SceneManagement;
         {
             gamehasEnded = true;
 
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.SetActive(false);
+            }
             Floor.SetActive(false);
             GameOverPanel.SetActive(true);
         }
