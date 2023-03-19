@@ -12,7 +12,7 @@ public class PlayerScript : MonoBehaviour
     private float horizontal;
     private float vertical;
 
-    private float runSpeed = 5.0f;
+    private float runSpeed = 4.0f;
 
     // Declare Player Colour Variables
 
@@ -51,10 +51,11 @@ public class PlayerScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Enemy")
+        if (collision.gameObject.CompareTag("Enemy"))
         {
 
             // Game Over Event
+            gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
     }

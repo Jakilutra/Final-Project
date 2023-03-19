@@ -18,10 +18,8 @@ using UnityEngine.SceneManagement;
         {
             gamehasEnded = true;
 
-            Enemy.SetActive(false);
             Floor.SetActive(false);
             GameOverPanel.SetActive(true);
-            Player.SetActive(false);
         }
     }
 

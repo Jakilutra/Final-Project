@@ -129,27 +129,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3350744267979075306}
   m_PrefabAsset: {fileID: 0}
---- !u!50 &208851405
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208851402}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &273994620 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1040655420019264438, guid: 2aed45607a2e17a4cab0d3803b722eb6,
@@ -574,6 +553,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2641025346887220671, guid: 9b8c3bbff747f1747b05860ae6465bae,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b8c3bbff747f1747b05860ae6465bae, type: 3}
 --- !u!1001 &3350744267979075306
@@ -662,10 +646,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4602750514365038516, guid: e66b9d530adff694fb5f433da4843a3f,
+        type: 3}
+      propertyPath: Player
+      value: 
+      objectReference: {fileID: 710729725}
+    - target: {fileID: -2571611710788959842, guid: e66b9d530adff694fb5f433da4843a3f,
+        type: 3}
+      propertyPath: m_Mass
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: -2571611710788959842, guid: e66b9d530adff694fb5f433da4843a3f,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6706475965447576341, guid: e66b9d530adff694fb5f433da4843a3f,
         type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6706475965447576341, guid: e66b9d530adff694fb5f433da4843a3f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6706475965447576341, guid: e66b9d530adff694fb5f433da4843a3f,
         type: 3}
