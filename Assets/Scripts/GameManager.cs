@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
     bool gamehasEnded = false;
 
     public GameObject[] enemies;
+    public GameObject[] walls;
     public GameObject Floor;
     public GameObject GameOverPanel;
     public GameObject Player;
@@ -15,6 +16,7 @@ using UnityEngine.SceneManagement;
     void Start()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        walls = GameObject.FindGameObjectsWithTag("Wall");
     }
 
     public void GameOver()
@@ -26,6 +28,10 @@ using UnityEngine.SceneManagement;
             foreach (GameObject enemy in enemies)
             {
                 enemy.SetActive(false);
+            }
+            foreach (GameObject wall in walls)
+            {
+                wall.SetActive(false);
             }
             Floor.SetActive(false);
             GameOverPanel.SetActive(true);

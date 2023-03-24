@@ -12,14 +12,14 @@ public class PlayerScript : MonoBehaviour
     private float horizontal;
     private float vertical;
 
-    private float runSpeed = 5.0f;
+    private float runSpeed = 5f;
 
     // Declare Player Colour Variables
 
     public Color activeColor;
     private SpriteRenderer render;
     private Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
-    public Color colorWhite = new Color(1f, 1f, 1f, 0.75f);
+    public Color colorWhite = new Color(1f, 1f, 1f);
     private Color colorGreen = new Color(0.25f, 1f, 0.25f);
     private Color colorRed = new Color(1f, 0.25f, 0.25f);
     private Color colorBlue = new Color(0.25f, 0.25f, 1f);
@@ -28,6 +28,7 @@ public class PlayerScript : MonoBehaviour
 
     void ColorChangeSetUp()
     {
+        colorWhite.a = 0.75f;
         activeColor = colorWhite;
         render = GetComponent<SpriteRenderer>();
         colorChange = new Dictionary<Color, Color>
@@ -46,7 +47,6 @@ public class PlayerScript : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         ColorChangeSetUp();
-
     }
 
     // Collision
@@ -77,13 +77,13 @@ public class PlayerScript : MonoBehaviour
             {
                 activeColor = newColor;
                 render.color = newColor;
-                if (newColor != colorWhite)
+                if (newColor == colorWhite)
                 {
-                    gameObject.layer = LayerMask.NameToLayer("Player");
+                    gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
                 }
                 else
                 {
-                    gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+                    gameObject.layer = LayerMask.NameToLayer("Player");
                 }
             }
         }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -31,11 +32,11 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Wall
+  - White Wall
+  - Green Wall
+  - Red Wall
+  - Blue Wall
   - PlayerDrop
   - Platform
   m_SortingLayers:
