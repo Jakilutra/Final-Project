@@ -12,7 +12,7 @@ public class PlayerScript : MonoBehaviour
     private float horizontal;
     private float vertical;
 
-    private float runSpeed = 5f;
+    private float runSpeed = 20f;
 
     // Declare Player Colour Variables
 
