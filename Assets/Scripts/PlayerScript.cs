@@ -12,7 +12,7 @@ public class PlayerScript : MonoBehaviour
     private float horizontal;
     private float vertical;
 
-    private float runSpeed = 20f;
+    private float runSpeed = 5f;
 
     // Declare Player Colour Variables
 
@@ -23,6 +23,14 @@ public class PlayerScript : MonoBehaviour
     private Color colorGreen = new Color(0.25f, 1f, 0.25f);
     private Color colorRed = new Color(1f, 0.25f, 0.25f);
     private Color colorBlue = new Color(0.25f, 0.25f, 1f);
+
+    // StartUp
+
+    void Start()
+    {
+        body = GetComponent<Rigidbody2D>();
+        ColorChangeSetUp();
+    }
 
     // Finishes Setting of Player Colour Variables
 
@@ -39,27 +47,6 @@ public class PlayerScript : MonoBehaviour
             { colorBlue, colorWhite }
         };
         gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
-    }
-
-    // StartUp
-
-    void Start()
-    {
-        body = GetComponent<Rigidbody2D>();
-        ColorChangeSetUp();
-    }
-
-    // Collision
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-
-            // Game Over Event
-            gameObject.SetActive(false);
-            FindObjectOfType<GameManager>().GameOver();
-        }
     }
 
     // Tick
@@ -92,5 +79,18 @@ public class PlayerScript : MonoBehaviour
     void FixedUpdate()
     {
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
+    }
+
+    // Collision
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+
+            // Game Over Event
+            gameObject.SetActive(false);
+            FindObjectOfType<GameManager>().GameOver();
+        }
     }
 }

@@ -6,15 +6,21 @@ public class TeleportScript : MonoBehaviour
 {
 
     public Camera mainCamera;
+    private GameObject player;
 
     void Update ()
     {
 
-    // Upon pressing down T, finds the nearest visible teleport point, and teleports to it. After, it disables the forward teleport circle and reveals the backward one.
+        // Upon pressing down T, finds the nearest visible teleport point, and teleports to it. After, it disables the forward teleport circle and reveals the backward one.
 
         if (Input.GetKeyDown(KeyCode.T))
         {
             GameObject[] teleporters = GameObject.FindGameObjectsWithTag("Teleporter");
+            SpriteRenderer spriteRenderer1 = null;
+            SpriteRenderer spriteRenderer2 = null;
+            Vector3 teleporterLocation = new Vector3(0,0,0);
+            GameObject player = GameObject.FindWithTag("Player");
+
             foreach (GameObject teleporter in teleporters)
             {
                 Vector3 targetPosition = mainCamera.WorldToViewportPoint(teleporter.transform.position);
@@ -23,18 +29,37 @@ public class TeleportScript : MonoBehaviour
                 {
 
                     SpriteRenderer spriteRenderer = teleporter.GetComponent<SpriteRenderer>();
-               
+
                     if (spriteRenderer.enabled)
                     {
-                        transform.position = teleporter.transform.position;
-                        spriteRenderer.enabled = false;
+                        teleporterLocation = teleporter.transform.position;
+                        spriteRenderer1 = spriteRenderer;
                     }
                     else
                     {
-                        spriteRenderer.enabled = true;
+                        spriteRenderer2 = spriteRenderer;
                     }
                 }
             }
+            if (spriteRenderer1 != null && spriteRenderer2 != null && !teleporterLocation.Equals(default))
+            {
+                transform.position = teleporterLocation;
+                spriteRenderer1.enabled = false;
+                spriteRenderer2.enabled = true;
+            }
+            else
+            {
+                StartCoroutine(ChangePlayerColor(player));
+            }
         }
+    }
+
+    private IEnumerator ChangePlayerColor(GameObject player)
+    {
+        SpriteRenderer render = player.GetComponent<SpriteRenderer>();
+        Color tempColor = render.color;
+        render.color = new Color(0.125f, 0.125f, 0.125f);
+        yield return new WaitForSeconds(0.1f);
+        render.color = tempColor;
     }
 }
