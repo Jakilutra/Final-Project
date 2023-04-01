@@ -11,8 +11,10 @@ public class PlayerScript : MonoBehaviour
 
     private float horizontal;
     private float vertical;
+    private Vector2 movementDirection;
 
     private float runSpeed = 5f;
+    private float rotationSpeed = 3600f;
 
     // Declare Player Colour Variables
 
@@ -53,14 +55,24 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
+        // Player Movement Update
+
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
+        movementDirection = new Vector2(horizontal, vertical).normalized;
+
+        if (movementDirection != Vector2.zero)
+        {
+            float angle = Mathf.Atan2(movementDirection.y, movementDirection.x) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
 
         // Color Change Event
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (colorChange.TryGetValue(activeColor, out Color newColor))
+            if (colorChange.TryGetValue(activeColor, out Color newColor) && !GetComponent<PolygonCollider2D>().isTrigger)
             {
                 activeColor = newColor;
                 render.color = newColor;
@@ -72,6 +84,10 @@ public class PlayerScript : MonoBehaviour
                 {
                     gameObject.layer = LayerMask.NameToLayer("Player");
                 }
+            }
+            else
+            {
+                StartCoroutine(TogglePlayerVisibility(gameObject));
             }
         }
     }
@@ -92,5 +108,13 @@ public class PlayerScript : MonoBehaviour
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
+    }
+
+    private IEnumerator TogglePlayerVisibility(GameObject player)
+    {
+        SpriteRenderer render = player.GetComponent<SpriteRenderer>();
+        render.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        render.enabled = true;
     }
 }

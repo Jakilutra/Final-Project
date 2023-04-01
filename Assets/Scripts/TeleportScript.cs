@@ -49,17 +49,16 @@ public class TeleportScript : MonoBehaviour
             }
             else
             {
-                StartCoroutine(ChangePlayerColor(player));
+                StartCoroutine(TogglePlayerVisibility(player));
             }
         }
     }
 
-    private IEnumerator ChangePlayerColor(GameObject player)
+    private IEnumerator TogglePlayerVisibility(GameObject player)
     {
         SpriteRenderer render = player.GetComponent<SpriteRenderer>();
-        Color tempColor = render.color;
-        render.color = new Color(0.125f, 0.125f, 0.125f);
+        render.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        render.color = tempColor;
+        render.enabled = true;
     }
 }
