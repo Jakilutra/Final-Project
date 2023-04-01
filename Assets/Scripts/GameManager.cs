@@ -45,7 +45,7 @@ using UnityEngine.SceneManagement;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.F5))
         {
           Restart();
         }

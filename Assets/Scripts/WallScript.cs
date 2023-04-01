@@ -6,41 +6,51 @@ public class WallScript : MonoBehaviour
 {
 
     private SpriteRenderer render;
-    private new BoxCollider2D collider;
+    private BoxCollider2D wallCollider;
     private GameObject player;
+    private PolygonCollider2D playerCollider;
+    private PlayerScript playerScript;
 
     void Start()
     {
         render = GetComponent<SpriteRenderer>();
-        collider = GetComponent<BoxCollider2D>();
+        wallCollider = GetComponent<BoxCollider2D>();
         player = GameObject.FindWithTag("Player");
+        playerCollider = player.GetComponent<PolygonCollider2D>();
+
     }
 
-    void Update ()
+    void Update()
     {
-        if (player.GetComponent<PolygonCollider2D>().IsTouching(collider) && player.layer == LayerMask.NameToLayer("IgnorePlayer"))
+        if (playerCollider.IsTouching(wallCollider) && player.layer == LayerMask.NameToLayer("IgnorePlayer"))
         {
-            render.enabled = false;
-            player.GetComponent<PolygonCollider2D>().isTrigger = true;
+            if (gameObject.layer == LayerMask.NameToLayer("White Wall"))
+            {
+                render.enabled = false;
+                playerCollider.isTrigger = true;
+            }
+            else
+            {
+                playerCollider.isTrigger = false;
+            }
         }
-
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("IgnorePlayer"))
+        if (gameObject.layer == LayerMask.NameToLayer("White Wall") && collision.gameObject.layer == LayerMask.NameToLayer("IgnorePlayer"))
         {
             render.enabled = false;
-            collision.gameObject.GetComponent<PolygonCollider2D>().isTrigger = true;
+            playerCollider.isTrigger = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("IgnorePlayer"))
+        if (gameObject.layer == LayerMask.NameToLayer("White Wall") && other.gameObject.layer == LayerMask.NameToLayer("IgnorePlayer"))
         {
             render.enabled = true;
-            other.gameObject.GetComponent<PolygonCollider2D>().isTrigger = false;
+            playerCollider.isTrigger = false;
         }
     }
 }
