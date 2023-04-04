@@ -20,11 +20,22 @@ public class PlayerScript : MonoBehaviour
 
     public Color activeColor;
     private SpriteRenderer render;
+    private SpriteRenderer renderb;
+    public GameObject bullet;
     private Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
     public Color colorWhite = new Color(1f, 1f, 1f);
-    private Color colorGreen = new Color(0.25f, 1f, 0.25f);
-    private Color colorRed = new Color(1f, 0.25f, 0.25f);
-    private Color colorBlue = new Color(0.25f, 0.25f, 1f);
+    public Color colorGreen = new Color(0.25f, 1f, 0.25f);
+    public Color colorRed = new Color(1f, 0.25f, 0.25f);
+    public Color colorBlue = new Color(0.25f, 0.25f, 1f);
+    private Dictionary<Color, float> speedChange = new Dictionary<Color, float>();
+
+    // Declare Collectible/Message Variables
+
+    public GameObject greenWallAbility;
+    public GameObject greenTeleportAbility;
+    public GameObject typeR;
+    public GameObject typeSpace;
+    public GameObject whiteSafe;
 
     // StartUp
 
@@ -41,14 +52,15 @@ public class PlayerScript : MonoBehaviour
         colorWhite.a = 0.75f;
         activeColor = colorWhite;
         render = GetComponent<SpriteRenderer>();
-        colorChange = new Dictionary<Color, Color>
-        {
-            { colorWhite, colorGreen },
-            { colorGreen, colorRed },
-            { colorRed, colorBlue },
-            { colorBlue, colorWhite }
-        };
+        renderb = bullet.GetComponent<SpriteRenderer>();
         gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+        speedChange = new Dictionary<Color, float>
+        {
+            { colorWhite, 5f },
+            { colorGreen, 6f },
+            { colorRed, 7f },
+            { colorBlue, 8f },
+        };
     }
 
     // Tick
@@ -76,6 +88,8 @@ public class PlayerScript : MonoBehaviour
             {
                 activeColor = newColor;
                 render.color = newColor;
+                renderb.color = newColor;
+                speedChange.TryGetValue(newColor, out runSpeed);
                 if (newColor == colorWhite)
                 {
                     gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
@@ -108,9 +122,29 @@ public class PlayerScript : MonoBehaviour
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
+
+        if (collision.gameObject.CompareTag("Collectible"))
+        {
+           if (collision.gameObject == greenWallAbility)
+           {
+                Destroy(greenWallAbility);
+                colorChange = new Dictionary<Color, Color>
+                {
+                    { colorWhite, colorGreen },
+                    { colorGreen, colorWhite },
+                };
+                activeColor = colorGreen;
+                render.color = colorGreen;
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                runSpeed = 6f;
+                typeR.SetActive(true);
+                typeSpace.SetActive(true);
+                whiteSafe.SetActive(true);
+            }
+        }
     }
 
-    private IEnumerator TogglePlayerVisibility(GameObject player)
+    public IEnumerator TogglePlayerVisibility(GameObject player)
     {
         SpriteRenderer render = player.GetComponent<SpriteRenderer>();
         render.enabled = false;

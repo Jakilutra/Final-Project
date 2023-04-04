@@ -46,5 +46,18 @@ public class EnemyScript : MonoBehaviour
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

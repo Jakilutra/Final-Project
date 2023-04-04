@@ -10,6 +10,8 @@ public class WallScript : MonoBehaviour
     private GameObject player;
     private PolygonCollider2D playerCollider;
     private PlayerScript playerScript;
+    private GameObject otherObject;
+    private Color otherColor;
 
     void Start()
     {
@@ -17,14 +19,17 @@ public class WallScript : MonoBehaviour
         wallCollider = GetComponent<BoxCollider2D>();
         player = GameObject.FindWithTag("Player");
         playerCollider = player.GetComponent<PolygonCollider2D>();
+        playerScript = player.GetComponent<PlayerScript>();
 
     }
 
     void Update()
     {
-        if (playerCollider.IsTouching(wallCollider) && player.layer == LayerMask.NameToLayer("IgnorePlayer"))
+        if (playerCollider.IsTouching(wallCollider))
         {
-            if (gameObject.layer == LayerMask.NameToLayer("White Wall"))
+            bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && gameObject.layer == LayerMask.NameToLayer("White Wall");
+            bool greenCheck = player.layer == LayerMask.NameToLayer("Player") && gameObject.layer == LayerMask.NameToLayer("Green Wall");
+            if (whiteCheck || greenCheck)
             {
                 render.enabled = false;
                 playerCollider.isTrigger = true;
@@ -43,6 +48,20 @@ public class WallScript : MonoBehaviour
             render.enabled = false;
             playerCollider.isTrigger = true;
         }
+        otherObject = collision.gameObject;
+        otherColor = otherObject.GetComponent<SpriteRenderer>().color;
+        if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && otherColor.g == playerScript.colorGreen.g && otherColor.r != 1)
+        {
+            render.enabled = false;
+            if (otherObject.tag == "Bullet")
+            {
+                otherObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
+            }
+            else
+            {
+                otherObject.GetComponent<PolygonCollider2D>().isTrigger = true;
+            }
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -51,6 +70,20 @@ public class WallScript : MonoBehaviour
         {
             render.enabled = true;
             playerCollider.isTrigger = false;
+        }
+        otherObject = other.gameObject;
+        otherColor = otherObject.GetComponent<SpriteRenderer>().color;
+        if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && otherColor.g == playerScript.colorGreen.g && otherColor.r != 1)
+        {
+            render.enabled = true;
+            if (otherObject.tag == "Bullet")
+            {
+                otherObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
+            }
+            else
+            {
+                otherObject.GetComponent<PolygonCollider2D>().isTrigger = false;
+            }
         }
     }
 }

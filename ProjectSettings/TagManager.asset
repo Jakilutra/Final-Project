@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Wall
   - Teleporter
+  - Collectible
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -31,7 +33,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Collectible
   - Teleporter
   - Wall
   - White Wall
