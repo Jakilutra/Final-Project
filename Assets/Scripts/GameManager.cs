@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 {
     bool gamehasEnded = false;
 
+    public GameObject[] collectibles;
     public GameObject[] enemies;
+    public GameObject[] messages;
     public GameObject[] walls;
     public GameObject Floor;
     public GameObject GameOverPanel;
@@ -15,8 +17,6 @@ using UnityEngine.SceneManagement;
 
     void Start()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        walls = GameObject.FindGameObjectsWithTag("Wall");
     }
 
     public void GameOver()
@@ -24,17 +24,41 @@ using UnityEngine.SceneManagement;
         if (!gamehasEnded)
         {
             gamehasEnded = true;
-
+            collectibles = GameObject.FindGameObjectsWithTag("Collectible");
+            foreach (GameObject collectible in collectibles)
+            {
+                if (collectible != null)
+                {
+                    collectible.SetActive(false);
+                }
+            }
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject enemy in enemies)
             {
-                enemy.SetActive(false);
+                if (enemy != null)
+                {
+                    enemy.SetActive(false);
+                }
             }
+            messages = GameObject.FindGameObjectsWithTag("Message");
+            foreach (GameObject message in messages)
+            {
+                if (message != null)
+                {
+                   message.SetActive(false);
+                }
+            }
+            walls = GameObject.FindGameObjectsWithTag("Wall");
             foreach (GameObject wall in walls)
             {
-                wall.SetActive(false);
+                if (wall != null)
+                {
+                    wall.SetActive(false);
+                }
             }
             Floor.SetActive(false);
             GameOverPanel.SetActive(true);
+
         }
     }
 

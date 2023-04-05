@@ -29,6 +29,10 @@ public class PlayerScript : MonoBehaviour
     public Color colorBlue = new Color(0.25f, 0.25f, 1f);
     private Dictionary<Color, float> speedChange = new Dictionary<Color, float>();
 
+    // Declare Ability Variables
+
+    private bool hasGreenTeleport = true;
+
     // Declare Collectible/Message Variables
 
     public GameObject greenWallAbility;
@@ -36,6 +40,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject typeR;
     public GameObject typeSpace;
     public GameObject whiteSafe;
+
 
     // StartUp
 
@@ -117,7 +122,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-
             // Game Over Event
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
@@ -125,8 +129,8 @@ public class PlayerScript : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Collectible"))
         {
-           if (collision.gameObject == greenWallAbility)
-           {
+            if (collision.gameObject == greenWallAbility)
+            {
                 Destroy(greenWallAbility);
                 colorChange = new Dictionary<Color, Color>
                 {
@@ -135,12 +139,35 @@ public class PlayerScript : MonoBehaviour
                 };
                 activeColor = colorGreen;
                 render.color = colorGreen;
+                renderb.color = colorGreen;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 6f;
                 typeR.SetActive(true);
                 typeSpace.SetActive(true);
                 whiteSafe.SetActive(true);
+                return;
             }
+            GameObject gTAClone = GameObject.Find(greenTeleportAbility.name + "(Clone)");
+            if (collision.gameObject == gTAClone)
+            {
+                Destroy(gTAClone);
+                activeColor = colorGreen;
+                render.color = colorGreen;
+                renderb.color = colorGreen;
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                runSpeed = 6f;
+            }
+        }
+    }
+
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            // Game Over Event
+            gameObject.SetActive(false);
+            FindObjectOfType<GameManager>().GameOver();
         }
     }
 

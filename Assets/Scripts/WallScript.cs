@@ -53,9 +53,9 @@ public class WallScript : MonoBehaviour
         if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && otherColor.g == playerScript.colorGreen.g && otherColor.r != 1)
         {
             render.enabled = false;
-            if (otherObject.tag == "Bullet")
+            if (otherObject.CompareTag("Bullet"))
             {
-                otherObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
+                otherObject.GetComponent<BoxCollider2D>().isTrigger = true;
             }
             else
             {
@@ -76,9 +76,9 @@ public class WallScript : MonoBehaviour
         if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && otherColor.g == playerScript.colorGreen.g && otherColor.r != 1)
         {
             render.enabled = true;
-            if (otherObject.tag == "Bullet")
+            if (otherObject.CompareTag("Bullet"))
             {
-                otherObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
+                otherObject.GetComponent<BoxCollider2D>().isTrigger = false;
             }
             else
             {

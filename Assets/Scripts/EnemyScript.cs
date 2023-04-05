@@ -13,6 +13,10 @@ public class EnemyScript : MonoBehaviour
     private Dictionary<float, float> enemyID = new Dictionary<float, float>();
     private float distance;
     private PlayerScript playerScript;
+    private int deathCounter;
+    private float deathPoint;
+    private Vector3 spawnPosition;
+    [SerializeField] private GameObject greenTeleport;
 
     void Start()
     {
@@ -26,6 +30,8 @@ public class EnemyScript : MonoBehaviour
             { 1, 4f },
         };
         enemyID.TryGetValue(calcColor, out runSpeed);
+        deathCounter = 0;
+        deathPoint = Mathf.Pow(transform.localScale.x, 3f);
     }
 
     void Update()
@@ -34,8 +40,14 @@ public class EnemyScript : MonoBehaviour
         {
             distance = Vector2.Distance(transform.position, Player.transform.position);
             Vector2 direction = Player.transform.position - transform.position;
-
-            transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, runSpeed * Time.deltaTime);
+            if (deathCounter > 20)
+            {
+                transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, -runSpeed * Time.deltaTime);
+            }
+            else
+            {
+                transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, runSpeed * Time.deltaTime);
+            }
         }
     }
 
@@ -46,18 +58,45 @@ public class EnemyScript : MonoBehaviour
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
-        if (collision.gameObject.CompareTag("Bullet"))
-        {
-            Destroy(gameObject);
-        }
-
+        EnemyDamage(collision.gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Bullet"))
+        if (other.gameObject.CompareTag("Player") && playerScript.activeColor != playerScript.colorWhite)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            FindObjectOfType<GameManager>().GameOver();
         }
+        EnemyDamage(other.gameObject);
+    }
+
+    void EnemyDamage (GameObject obj)
+    {
+        if (obj.CompareTag("Bullet"))
+        {
+            deathCounter++;
+            spawnPosition = transform.position;
+            if (obj != null)
+            {
+                StartCoroutine(playerScript.TogglePlayerVisibility(gameObject));
+            }
+            if (deathCounter == deathPoint)
+            {
+                if (obj != null)
+                {
+                    Destroy(obj);
+                }
+                if (obj != null)
+                {
+                    Destroy(gameObject);
+                }
+                if (greenTeleport != null)
+                {
+                    Instantiate(greenTeleport, spawnPosition, Quaternion.identity);
+                }
+            }
+        }
+
     }
 }
