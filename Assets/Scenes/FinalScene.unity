@@ -296,6 +296,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848432, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
+      propertyPath: m_Color.b
+      value: 0.2509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1828491304841848432, guid: 40fb446469953dc4998ffe4b889bf50a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1828491304841848432, guid: 40fb446469953dc4998ffe4b889bf50a,
+        type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -367,12 +377,12 @@ PrefabInstance:
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_TagString
-      value: Teleporter
+      value: GreenTeleporter
       objectReference: {fileID: 0}
     - target: {fileID: 6745524839346557012, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -1639,12 +1649,12 @@ PrefabInstance:
     - target: {fileID: 1828491304841848432, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.2509804
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848432, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.2509804
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848433, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -1714,12 +1724,12 @@ PrefabInstance:
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_TagString
-      value: Teleporter
+      value: GreenTeleporter
       objectReference: {fileID: 0}
     - target: {fileID: 6745524839346557012, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -3260,7 +3270,8 @@ PrefabInstance:
         type: 3}
       propertyPath: greenTeleportAbility
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4741158328886374877, guid: 3b110ee5c850b3f488ff9777ee6c4ab1,
+        type: 3}
     - target: {fileID: -3606711074157712421, guid: 17d66c184bcc30f46bf9d0c123b7b84a,
         type: 3}
       propertyPath: bullet

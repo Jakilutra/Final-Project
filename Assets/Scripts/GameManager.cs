@@ -4,74 +4,66 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
  public class GameManager : MonoBehaviour
+
+    // Declaring Variables
 {
     bool gamehasEnded = false;
 
-    public GameObject[] collectibles;
-    public GameObject[] enemies;
-    public GameObject[] messages;
-    public GameObject[] walls;
-    public GameObject Floor;
-    public GameObject GameOverPanel;
-    public GameObject Player;
+    public GameObject gameOver;
+    private GameObject[] findRest = new GameObject[1];
 
     void Start()
     {
+        findRest[0] = GameObject.Find("Floor");
     }
 
-    public void GameOver()
-    {
-        if (!gamehasEnded)
-        {
-            gamehasEnded = true;
-            collectibles = GameObject.FindGameObjectsWithTag("Collectible");
-            foreach (GameObject collectible in collectibles)
-            {
-                if (collectible != null)
-                {
-                    collectible.SetActive(false);
-                }
-            }
-            enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (GameObject enemy in enemies)
-            {
-                if (enemy != null)
-                {
-                    enemy.SetActive(false);
-                }
-            }
-            messages = GameObject.FindGameObjectsWithTag("Message");
-            foreach (GameObject message in messages)
-            {
-                if (message != null)
-                {
-                   message.SetActive(false);
-                }
-            }
-            walls = GameObject.FindGameObjectsWithTag("Wall");
-            foreach (GameObject wall in walls)
-            {
-                if (wall != null)
-                {
-                    wall.SetActive(false);
-                }
-            }
-            Floor.SetActive(false);
-            GameOverPanel.SetActive(true);
-
-        }
-    }
-
-    void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+    // Restart button
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F5))
         {
           Restart();
+        }
+    }
+
+    // Deactivates Game Objects apart from the Game Over one.
+
+    public void GameOver()
+    {
+        if (!gamehasEnded)
+        {
+            gamehasEnded = true;
+            gameOver.SetActive(true);
+            Deactivate("Collectible");
+            Deactivate("Enemy");
+            Deactivate("Message");
+            Deactivate("Wall");
+            Deactivate("Others");
+
+        }
+    }
+
+    // Restarts the game.
+
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // Function that loops through arrays to find game objects to deactivate.
+
+    void Deactivate(string tagName)
+    {
+        GameObject[] gameObjects = tagName != "Others" ? GameObject.FindGameObjectsWithTag(tagName) : findRest;
+        {
+            foreach (GameObject i in gameObjects)
+            {
+                if (i != null)
+                {
+                    i.SetActive(false);
+                }
+            }
         }
     }
 }

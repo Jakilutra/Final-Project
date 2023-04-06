@@ -31,7 +31,7 @@ public class PlayerScript : MonoBehaviour
 
     // Declare Ability Variables
 
-    private bool hasGreenTeleport = true;
+    private Dictionary<string, bool> hasAbility = new Dictionary<string, bool>();
 
     // Declare Collectible/Message Variables
 
@@ -48,6 +48,15 @@ public class PlayerScript : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         ColorChangeSetUp();
+        hasAbility = new Dictionary<string, bool>
+        {
+                    { "GreenWall", false },
+                    { "GreenTeleport", false },
+                    { "RedWall", false },
+                    { "RedTeleport", false },
+                    { "BlueWall", false },
+                    { "BlueTeleport", false },
+        };
     }
 
     // Finishes Setting of Player Colour Variables
@@ -132,6 +141,7 @@ public class PlayerScript : MonoBehaviour
             if (collision.gameObject == greenWallAbility)
             {
                 Destroy(greenWallAbility);
+                hasAbility["GreenWall"] = true;
                 colorChange = new Dictionary<Color, Color>
                 {
                     { colorWhite, colorGreen },
@@ -151,6 +161,7 @@ public class PlayerScript : MonoBehaviour
             if (collision.gameObject == gTAClone)
             {
                 Destroy(gTAClone);
+                hasAbility["GreenTeleport"] = true;
                 activeColor = colorGreen;
                 render.color = colorGreen;
                 renderb.color = colorGreen;

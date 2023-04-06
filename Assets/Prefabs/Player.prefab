@@ -156,7 +156,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeColor: {r: 0, g: 0, b: 0, a: 0}
+  bullet: {fileID: 0}
   colorWhite: {r: 1, g: 1, b: 1, a: 0.25}
+  colorGreen: {r: 0.25, g: 1, b: 0.25, a: 1}
+  colorRed: {r: 1, g: 0.25, b: 0.25, a: 1}
+  colorBlue: {r: 0.25, g: 0.25, b: 1, a: 1}
+  greenWallAbility: {fileID: 0}
+  greenTeleportAbility: {fileID: 4741158328886374877, guid: 3b110ee5c850b3f488ff9777ee6c4ab1,
+    type: 3}
+  typeR: {fileID: 0}
+  typeSpace: {fileID: 0}
+  whiteSafe: {fileID: 0}
 --- !u!114 &7315523844804665753
 MonoBehaviour:
   m_ObjectHideFlags: 0

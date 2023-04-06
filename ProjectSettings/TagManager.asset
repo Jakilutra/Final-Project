@@ -6,10 +6,13 @@ TagManager:
   tags:
   - Enemy
   - Wall
-  - Teleporter
   - Collectible
   - Bullet
   - Message
+  - WhiteTeleporter
+  - GreenTeleporter
+  - RedTeleporter
+  - BlueTeleporter
   layers:
   - Default
   - TransparentFX
