@@ -38,6 +38,7 @@ using UnityEngine.SceneManagement;
             Deactivate("Collectible");
             Deactivate("Enemy");
             Deactivate("Message");
+            Deactivate("Teleporter");
             Deactivate("Wall");
             Deactivate("Others");
 

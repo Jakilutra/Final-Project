@@ -4,9 +4,20 @@ using UnityEngine;
 
 public class TeleportScript : MonoBehaviour
 {
+    // Declare variables.
 
     public Camera mainCamera;
     private GameObject player;
+    private PlayerScript playerScript;
+    [SerializeField] private GameObject bigGreenEnemy;
+
+    // Assign variables.
+
+    void Start ()
+    {
+        player = GameObject.Find("Player");
+        playerScript = player.GetComponent<PlayerScript>();
+    }
 
     void Update ()
     {
@@ -19,25 +30,29 @@ public class TeleportScript : MonoBehaviour
             SpriteRenderer spriteRenderer1 = null;
             SpriteRenderer spriteRenderer2 = null;
             Vector3 teleporterLocation = new Vector3(0,0,0);
-            GameObject player = GameObject.FindWithTag("Player");
 
             foreach (GameObject teleporter in teleporters)
             {
-                Vector3 targetPosition = mainCamera.WorldToViewportPoint(teleporter.transform.position);
-
-                if (targetPosition.x >= 0 && targetPosition.x <= 1 && targetPosition.y >= 0 && targetPosition.y <= 1)
+                bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && teleporter.layer == LayerMask.NameToLayer("White Teleporter");
+                bool greenCheck = player.layer == LayerMask.NameToLayer("Player") && teleporter.layer == LayerMask.NameToLayer("Green Teleporter") && playerScript.hasAbility["GreenTeleport"];
+                if (whiteCheck || greenCheck)
                 {
+                    Vector3 targetPosition = mainCamera.WorldToViewportPoint(teleporter.transform.position);
 
-                    SpriteRenderer spriteRenderer = teleporter.GetComponent<SpriteRenderer>();
+                    if (targetPosition.x >= 0 && targetPosition.x <= 1 && targetPosition.y >= 0 && targetPosition.y <= 1)
+                    {
 
-                    if (spriteRenderer.enabled)
-                    {
-                        teleporterLocation = teleporter.transform.position;
-                        spriteRenderer1 = spriteRenderer;
-                    }
-                    else
-                    {
-                        spriteRenderer2 = spriteRenderer;
+                        SpriteRenderer spriteRenderer = teleporter.GetComponent<SpriteRenderer>();
+
+                        if (spriteRenderer.enabled)
+                        {
+                            teleporterLocation = teleporter.transform.position;
+                            spriteRenderer1 = spriteRenderer;
+                        }
+                        else
+                        {
+                            spriteRenderer2 = spriteRenderer;
+                        }
                     }
                 }
             }
@@ -46,19 +61,16 @@ public class TeleportScript : MonoBehaviour
                 transform.position = teleporterLocation;
                 spriteRenderer1.enabled = false;
                 spriteRenderer2.enabled = true;
+                if (teleporterLocation == new Vector3 (-16,0,0))
+                {
+                    GameObject enemyClone = Instantiate(bigGreenEnemy, new Vector3(-16,10,0), Quaternion.identity);
+                    enemyClone.transform.localScale *= 3;
+                }
             }
             else
             {
-                StartCoroutine(TogglePlayerVisibility(player));
+                StartCoroutine(playerScript.Flicker(player));
             }
         }
-    }
-
-    private IEnumerator TogglePlayerVisibility(GameObject player)
-    {
-        SpriteRenderer render = player.GetComponent<SpriteRenderer>();
-        render.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        render.enabled = true;
     }
 }

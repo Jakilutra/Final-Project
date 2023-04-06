@@ -6,7 +6,7 @@ public class EnemyScript : MonoBehaviour
 {
     // Declare variables (movement, damage counter and collectible spawn).
 
-    [SerializeField] private GameObject Player;
+    private GameObject Player;
     private Color enemyColor;
     private float calcColor;
     private float runSpeed;
@@ -22,6 +22,7 @@ public class EnemyScript : MonoBehaviour
 
     void Start()
     {
+        Player = GameObject.Find("Player");
         playerScript = FindObjectOfType<PlayerScript>();
         enemyColor = gameObject.GetComponent<SpriteRenderer>().color;
         calcColor = 3 * Mathf.Floor(enemyColor.r) + 2 * Mathf.Floor(enemyColor.g) + 1 * Mathf.Floor(enemyColor.b);
@@ -91,7 +92,7 @@ public class EnemyScript : MonoBehaviour
             spawnPosition = transform.position;
             if (obj != null)
             {
-                StartCoroutine(playerScript.TogglePlayerVisibility(gameObject));
+                StartCoroutine(playerScript.Flicker(gameObject));
             }
             if (deathCounter == deathPoint)
             {

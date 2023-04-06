@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour
 {
 
-    // Declare Player Physics/Movement Variables
+    // Declare player physics/movement variables.
 
     Rigidbody2D body;
 
@@ -16,7 +16,7 @@ public class PlayerScript : MonoBehaviour
     private float runSpeed = 5f;
     private float rotationSpeed = 3600f;
 
-    // Declare Player Colour Variables
+    // Declare player colour variables.
 
     public Color activeColor;
     private SpriteRenderer render;
@@ -29,20 +29,26 @@ public class PlayerScript : MonoBehaviour
     public Color colorBlue = new Color(0.25f, 0.25f, 1f);
     private Dictionary<Color, float> speedChange = new Dictionary<Color, float>();
 
-    // Declare Ability Variables
+    // Declare ability variables.
 
-    private Dictionary<string, bool> hasAbility = new Dictionary<string, bool>();
+    public Dictionary<string, bool> hasAbility = new Dictionary<string, bool>();
 
-    // Declare Collectible/Message Variables
+    // Declare collectible, message and teleporter variables.
 
     public GameObject greenWallAbility;
     public GameObject greenTeleportAbility;
+
+    public GameObject matchColor;
     public GameObject typeR;
     public GameObject typeSpace;
+    public GameObject typeT;
     public GameObject whiteSafe;
 
+    public GameObject greenTeleporter1;
+    public GameObject greenTeleporter2;
 
-    // StartUp
+
+    // Assigning variables (physics, colour and abilities).
 
     void Start()
     {
@@ -59,7 +65,7 @@ public class PlayerScript : MonoBehaviour
         };
     }
 
-    // Finishes Setting of Player Colour Variables
+    // Finishes setting of player colour variables.
 
     void ColorChangeSetUp()
     {
@@ -81,7 +87,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        // Player Movement Update
+        // Player movement update.
 
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
@@ -94,7 +100,7 @@ public class PlayerScript : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // Color Change Event
+        // Color change event.
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -115,7 +121,7 @@ public class PlayerScript : MonoBehaviour
             }
             else
             {
-                StartCoroutine(TogglePlayerVisibility(gameObject));
+                StartCoroutine(Flicker(gameObject));
             }
         }
     }
@@ -125,16 +131,18 @@ public class PlayerScript : MonoBehaviour
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
     }
 
-    // Collision
+    // Collision.
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // Game Over Event
+            // Game over event.
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
+
+        // Player upgrade events (via collectibles).
 
         if (collision.gameObject.CompareTag("Collectible"))
         {
@@ -162,6 +170,10 @@ public class PlayerScript : MonoBehaviour
             {
                 Destroy(gTAClone);
                 hasAbility["GreenTeleport"] = true;
+                greenTeleporter1.SetActive(true);
+                greenTeleporter2.SetActive(true);
+                matchColor.SetActive(true);
+                typeT.SetActive(true);
                 activeColor = colorGreen;
                 render.color = colorGreen;
                 renderb.color = colorGreen;
@@ -176,13 +188,13 @@ public class PlayerScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            // Game Over Event
+            // Game over event.
             gameObject.SetActive(false);
             FindObjectOfType<GameManager>().GameOver();
         }
     }
 
-    public IEnumerator TogglePlayerVisibility(GameObject player)
+    public IEnumerator Flicker(GameObject player)
     {
         SpriteRenderer render = player.GetComponent<SpriteRenderer>();
         render.enabled = false;
