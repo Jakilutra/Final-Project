@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
  public class GameManager : MonoBehaviour
 
-    // Declaring Variables
+    // Declaring variables.
 {
     bool gamehasEnded = false;
 
@@ -27,7 +27,7 @@ using UnityEngine.SceneManagement;
         }
     }
 
-    // Deactivates Game Objects apart from the Game Over one.
+    // Deactivates game objects apart from the game over one.
 
     public void GameOver()
     {

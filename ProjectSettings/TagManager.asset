@@ -9,10 +9,7 @@ TagManager:
   - Collectible
   - Bullet
   - Message
-  - WhiteTeleporter
-  - GreenTeleporter
-  - RedTeleporter
-  - BlueTeleporter
+  - Teleporter
   layers:
   - Default
   - TransparentFX
@@ -34,11 +31,11 @@ TagManager:
   - EnemyWeapon
   - BossWeakPoint
   - Bullet
-  - 
-  - 
-  - 
   - Collectible
-  - Teleporter
+  - White Teleporter
+  - Green Teleporter
+  - Red Teleporter
+  - Blue Teleporter
   - Wall
   - White Wall
   - Green Wall

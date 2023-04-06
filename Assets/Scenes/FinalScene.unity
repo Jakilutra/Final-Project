@@ -372,7 +372,7 @@ PrefabInstance:
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_Layer
-      value: 24
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -382,7 +382,7 @@ PrefabInstance:
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_TagString
-      value: GreenTeleporter
+      value: Teleporter
       objectReference: {fileID: 0}
     - target: {fileID: 6745524839346557012, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -1719,7 +1719,7 @@ PrefabInstance:
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_Layer
-      value: 24
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -1729,7 +1729,7 @@ PrefabInstance:
     - target: {fileID: 1828491304841848447, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
       propertyPath: m_TagString
-      value: GreenTeleporter
+      value: Teleporter
       objectReference: {fileID: 0}
     - target: {fileID: 6745524839346557012, guid: 40fb446469953dc4998ffe4b889bf50a,
         type: 3}
@@ -2711,6 +2711,11 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 710729725}
+    - target: {fileID: 2641025346887220669, guid: 9b8c3bbff747f1747b05860ae6465bae,
+        type: 3}
+      propertyPath: gameOver
+      value: 
+      objectReference: {fileID: 273994620}
     - target: {fileID: 2641025346887220669, guid: 9b8c3bbff747f1747b05860ae6465bae,
         type: 3}
       propertyPath: GameOverPanel

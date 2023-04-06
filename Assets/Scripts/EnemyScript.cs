@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    // Declare Enemy Physics/Movement Variables
+    // Declare variables (movement, damage counter and collectible spawn).
 
     [SerializeField] private GameObject Player;
     private Color enemyColor;
@@ -17,6 +17,8 @@ public class EnemyScript : MonoBehaviour
     private float deathPoint;
     private Vector3 spawnPosition;
     [SerializeField] private GameObject greenTeleport;
+
+    // Assign variables (movement and damage counter).
 
     void Start()
     {
@@ -33,6 +35,8 @@ public class EnemyScript : MonoBehaviour
         deathCounter = 0;
         deathPoint = Mathf.Pow(transform.localScale.x, 3f);
     }
+
+    // Enemy movement.
 
     void Update()
     {
@@ -51,8 +55,12 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
+    // Collision enter/exit events (enemy damage & game over).
+
     void OnCollisionEnter2D(Collision2D collision)
     {
+        // Game over event.
+
         if (collision.gameObject.CompareTag("Player") && playerScript.activeColor != playerScript.colorWhite)
         {
             gameObject.SetActive(false);
@@ -63,6 +71,8 @@ public class EnemyScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // Game over event.
+
         if (other.gameObject.CompareTag("Player") && playerScript.activeColor != playerScript.colorWhite)
         {
             gameObject.SetActive(false);
@@ -70,6 +80,8 @@ public class EnemyScript : MonoBehaviour
         }
         EnemyDamage(other.gameObject);
     }
+
+    // Method to handle enemy damage.
 
     void EnemyDamage (GameObject obj)
     {

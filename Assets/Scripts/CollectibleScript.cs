@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CollectibleScript : MonoBehaviour
 {
+    // Rotation of collectible token.
+
     private float rotationSpeed = 200f;
 
     void Update()

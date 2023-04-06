@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 
-   // Making a public variable for Player.
+   // Making a public variable for player.
 
 {
     public GameObject playerDiamond; 
@@ -27,6 +27,8 @@ public class CameraScript : MonoBehaviour
         transform.position = playerDiamond.transform.position + offset;
 
     }
+
+    // Camera shake method.
 
     public IEnumerator Shake(float duration, float magnitude)
     {

@@ -5,26 +5,28 @@ using UnityEngine;
 public class WallScript : MonoBehaviour
 {
 
+    // Declaring variables.
+
     private SpriteRenderer render;
     private BoxCollider2D wallCollider;
     private GameObject player;
     private PolygonCollider2D playerCollider;
-    private PlayerScript playerScript;
-    private GameObject otherObject;
-    private Color otherColor;
+
+    // Assigning variables.
 
     void Start()
     {
         render = GetComponent<SpriteRenderer>();
-        wallCollider = GetComponent<BoxCollider2D>();
         player = GameObject.FindWithTag("Player");
         playerCollider = player.GetComponent<PolygonCollider2D>();
-        playerScript = player.GetComponent<PlayerScript>();
-
     }
 
     void Update()
     {
+        // Player touching wall and changing colour check.
+
+        BoxCollider2D wallCollider;
+        wallCollider = GetComponent<BoxCollider2D>();
         if (playerCollider.IsTouching(wallCollider))
         {
             bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && gameObject.layer == LayerMask.NameToLayer("White Wall");
@@ -41,48 +43,38 @@ public class WallScript : MonoBehaviour
         }
     }
 
+    // Collision events.
+
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (gameObject.layer == LayerMask.NameToLayer("White Wall") && collision.gameObject.layer == LayerMask.NameToLayer("IgnorePlayer"))
-        {
-            render.enabled = false;
-            playerCollider.isTrigger = true;
-        }
-        otherObject = collision.gameObject;
-        otherColor = otherObject.GetComponent<SpriteRenderer>().color;
-        if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && otherColor.g == playerScript.colorGreen.g && otherColor.r != 1)
-        {
-            render.enabled = false;
-            if (otherObject.CompareTag("Bullet"))
-            {
-                otherObject.GetComponent<BoxCollider2D>().isTrigger = true;
-            }
-            else
-            {
-                otherObject.GetComponent<PolygonCollider2D>().isTrigger = true;
-            }
-        }
+        ColorCollision(collision.gameObject, true);
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (gameObject.layer == LayerMask.NameToLayer("White Wall") && other.gameObject.layer == LayerMask.NameToLayer("IgnorePlayer"))
+        ColorCollision(other.gameObject, false);
+    }
+
+    // Method that determines whether the object of a colour collides with a wall of another colour (same colours don't collide).
+
+    void ColorCollision(GameObject obj, bool triggerState)
+    {
+        if (gameObject.layer == LayerMask.NameToLayer("White Wall") && obj.layer == LayerMask.NameToLayer("IgnorePlayer"))
         {
-            render.enabled = true;
-            playerCollider.isTrigger = false;
+            render.enabled = !triggerState;
+            playerCollider.isTrigger = triggerState;
         }
-        otherObject = other.gameObject;
-        otherColor = otherObject.GetComponent<SpriteRenderer>().color;
-        if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && otherColor.g == playerScript.colorGreen.g && otherColor.r != 1)
+        Color objColor = obj.GetComponent<SpriteRenderer>().color;
+        if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && objColor.g == 1 && objColor.r != 1)
         {
             render.enabled = true;
-            if (otherObject.CompareTag("Bullet"))
+            if (obj.CompareTag("Bullet"))
             {
-                otherObject.GetComponent<BoxCollider2D>().isTrigger = false;
+                obj.GetComponent<BoxCollider2D>().isTrigger = triggerState;
             }
             else
             {
-                otherObject.GetComponent<PolygonCollider2D>().isTrigger = false;
+                obj.GetComponent<PolygonCollider2D>().isTrigger = triggerState;
             }
         }
     }
