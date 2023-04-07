@@ -10,6 +10,7 @@ TagManager:
   - Bullet
   - Message
   - Teleporter
+  - Floor
   layers:
   - Default
   - TransparentFX

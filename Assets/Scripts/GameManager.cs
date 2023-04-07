@@ -10,18 +10,18 @@ using UnityEngine.SceneManagement;
     bool gamehasEnded = false;
 
     public GameObject gameOver;
-    private GameObject[] findRest = new GameObject[1];
+    private GameObject[] findRest = new GameObject[0];
 
     void Start()
     {
-        findRest[0] = GameObject.Find("Floor");
+        // findRest[0] = GameObject.Find(""); // [adding to findRest array]
     }
 
     // Restart button
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F5))
+        if (Input.GetKeyDown(KeyCode.P))
         {
           Restart();
         }
@@ -37,10 +37,11 @@ using UnityEngine.SceneManagement;
             gameOver.SetActive(true);
             Deactivate("Collectible");
             Deactivate("Enemy");
+            Deactivate("Floor");
             Deactivate("Message");
             Deactivate("Teleporter");
             Deactivate("Wall");
-            Deactivate("Others");
+            // Deactivate("Others"); // [deactivating single game objects]
 
         }
     }

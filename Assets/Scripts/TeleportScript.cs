@@ -10,6 +10,7 @@ public class TeleportScript : MonoBehaviour
     private GameObject player;
     private PlayerScript playerScript;
     [SerializeField] private GameObject bigGreenEnemy;
+    private bool hasSpawned = false;
 
     // Assign variables.
 
@@ -61,10 +62,11 @@ public class TeleportScript : MonoBehaviour
                 transform.position = teleporterLocation;
                 spriteRenderer1.enabled = false;
                 spriteRenderer2.enabled = true;
-                if (teleporterLocation == new Vector3 (-16,0,0))
+                if (teleporterLocation == new Vector3 (-16,0,0) && !hasSpawned)
                 {
                     GameObject enemyClone = Instantiate(bigGreenEnemy, new Vector3(-16,10,0), Quaternion.identity);
                     enemyClone.transform.localScale *= 3;
+                    hasSpawned = true;
                 }
             }
             else
