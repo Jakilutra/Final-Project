@@ -164,9 +164,13 @@ MonoBehaviour:
   greenWallAbility: {fileID: 0}
   greenTeleportAbility: {fileID: 4741158328886374877, guid: 3b110ee5c850b3f488ff9777ee6c4ab1,
     type: 3}
+  matchColor: {fileID: 0}
   typeR: {fileID: 0}
   typeSpace: {fileID: 0}
+  typeT: {fileID: 0}
   whiteSafe: {fileID: 0}
+  greenTeleporter1: {fileID: 0}
+  greenTeleporter2: {fileID: 0}
 --- !u!114 &7315523844804665753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
+  bigGreenEnemy: {fileID: 0}
 --- !u!114 &-3606711074157712421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,4 +197,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5dc4fd26ab41ed47ba8ae41db879cbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 3717529501725565960, guid: 9c3f26959eaca0f4aa3056e8dbce4901, type: 3}
+  bullet: {fileID: 8794256625950430317, guid: 1ca059ecf0fc23c4dba83eb4c43a0d0f, type: 3}

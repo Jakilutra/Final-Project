@@ -8,8 +8,7 @@ public class EnemyScript : MonoBehaviour
 
     private GameObject Player;
     private Color enemyColor;
-    private float calcColor;
-    private float runSpeed;
+    public float calcColor, runSpeed;
     private Dictionary<float, float> enemyID = new Dictionary<float, float>();
     private float distance;
     private PlayerScript playerScript;
@@ -86,7 +85,7 @@ public class EnemyScript : MonoBehaviour
 
     void EnemyDamage (GameObject obj)
     {
-        if (obj.CompareTag("Bullet"))
+        if (obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Player Bullet"))
         {
             deathCounter++;
             spawnPosition = transform.position;

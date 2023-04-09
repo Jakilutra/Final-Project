@@ -9,18 +9,15 @@ public class PlayerScript : MonoBehaviour
 
     Rigidbody2D body;
 
-    private float horizontal;
-    private float vertical;
+    private float horizontal, vertical;
     private Vector2 movementDirection;
 
-    private float runSpeed = 5f;
-    private float rotationSpeed = 3600f;
+    public float runSpeed = 5f, rotationSpeed = 3600f;
 
     // Declare player colour variables.
 
     public Color activeColor;
-    private SpriteRenderer render;
-    private SpriteRenderer renderb;
+    private SpriteRenderer render, renderb;
     public GameObject bullet;
     private Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
     public Color colorWhite = new Color(1f, 1f, 1f);
@@ -35,20 +32,15 @@ public class PlayerScript : MonoBehaviour
 
     // Declare collectible, message and teleporter variables.
 
-    public GameObject greenWallAbility;
-    public GameObject greenTeleportAbility;
+    public GameObject greenWallAbility, greenTeleportAbility;
+    public GameObject matchColor, typeR, typeSpace, typeT, whiteSafe;
+    public GameObject greenTeleporter1, greenTeleporter2;
 
-    public GameObject matchColor;
-    public GameObject typeR;
-    public GameObject typeSpace;
-    public GameObject typeT;
-    public GameObject whiteSafe;
+    // Declare player damage variables.
 
-    public GameObject greenTeleporter1;
-    public GameObject greenTeleporter2;
+    private int deathCounter, deathPoint;
 
-
-    // Assigning variables (physics, colour and abilities).
+    // Assigning variables (physics, colour, abilities and damage).
 
     void Start()
     {
@@ -63,6 +55,8 @@ public class PlayerScript : MonoBehaviour
                     { "BlueWall", false },
                     { "BlueTeleport", false },
         };
+        // deathCounter = 0;
+       //  deathPoint = 3;
     }
 
     // Finishes setting of player colour variables.
@@ -104,7 +98,9 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (colorChange.TryGetValue(activeColor, out Color newColor) && !GetComponent<PolygonCollider2D>().isTrigger)
+            PolygonCollider2D playerCollider = GetComponent<PolygonCollider2D>();
+            bool collidingWithWall = playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && (playerCollider.IsTouchingLayers(LayerMask.GetMask("White Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Green Wall"))) && (body.velocity.x != 0 && body.velocity.y != 0);
+            if (colorChange.TryGetValue(activeColor, out Color newColor) && !playerCollider.isTrigger && !collidingWithWall)
             {
                 activeColor = newColor;
                 render.color = newColor;

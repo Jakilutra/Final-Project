@@ -7,10 +7,10 @@ TagManager:
   - Enemy
   - Wall
   - Collectible
-  - Bullet
   - Message
   - Teleporter
   - Floor
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -30,8 +30,8 @@ TagManager:
   - LitSprites
   - Destructable
   - EnemyWeapon
-  - BossWeakPoint
-  - Bullet
+  - Player Bullet
+  - Enemy Bullet
   - Collectible
   - White Teleporter
   - Green Teleporter

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraScript : MonoBehaviour
-
-   // Making a public variable for player.
-
 {
-    public GameObject playerDiamond; 
+    // Declare variables for player and offset.
 
+    public GameObject playerDiamond; 
     private Vector3 offset;
 
     // Start is called before the first frame update.

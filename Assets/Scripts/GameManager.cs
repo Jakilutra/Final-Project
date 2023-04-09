@@ -10,11 +10,11 @@ using UnityEngine.SceneManagement;
     bool gamehasEnded = false;
 
     public GameObject gameOver;
-    private GameObject[] findRest = new GameObject[0];
+    private GameObject[] findOthers = new GameObject[0]; // [array to add the rest of the game objects to deactivate]
 
     void Start()
     {
-        // findRest[0] = GameObject.Find(""); // [adding to findRest array]
+        // findOthers[0] = GameObject.Find(""); // [adding to findOthers array]
     }
 
     // Restart button
@@ -41,7 +41,7 @@ using UnityEngine.SceneManagement;
             Deactivate("Message");
             Deactivate("Teleporter");
             Deactivate("Wall");
-            // Deactivate("Others"); // [deactivating single game objects]
+            // Deactivate("Others"); // [deactivating the rest of the game objects]
 
         }
     }
@@ -57,7 +57,7 @@ using UnityEngine.SceneManagement;
 
     void Deactivate(string tagName)
     {
-        GameObject[] gameObjects = tagName != "Others" ? GameObject.FindGameObjectsWithTag(tagName) : findRest;
+        GameObject[] gameObjects = tagName != "Others" ? GameObject.FindGameObjectsWithTag(tagName) : findOthers;
         {
             foreach (GameObject i in gameObjects)
             {

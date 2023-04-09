@@ -11,6 +11,7 @@ public class WallScript : MonoBehaviour
     private BoxCollider2D wallCollider;
     private GameObject player;
     private PolygonCollider2D playerCollider;
+    private Rigidbody2D playerRigidbody;
 
     // Assigning variables.
 
@@ -19,14 +20,14 @@ public class WallScript : MonoBehaviour
         render = GetComponent<SpriteRenderer>();
         player = GameObject.FindWithTag("Player");
         playerCollider = player.GetComponent<PolygonCollider2D>();
+        playerRigidbody = player.GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
         // Player touching wall and changing colour check.
 
-        BoxCollider2D wallCollider;
-        wallCollider = GetComponent<BoxCollider2D>();
+        BoxCollider2D wallCollider = GetComponent<BoxCollider2D>();
         if (playerCollider.IsTouching(wallCollider))
         {
             bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && gameObject.layer == LayerMask.NameToLayer("White Wall");
@@ -35,8 +36,9 @@ public class WallScript : MonoBehaviour
             {
                 render.enabled = false;
                 playerCollider.isTrigger = true;
+
             }
-            else
+            else if (playerRigidbody.velocity.x != 0f && playerRigidbody.velocity.y != 0f)
             {
                 playerCollider.isTrigger = false;
             }
@@ -67,7 +69,7 @@ public class WallScript : MonoBehaviour
         Color objColor = obj.GetComponent<SpriteRenderer>().color;
         if (gameObject.layer == LayerMask.NameToLayer("Green Wall") && objColor.g == 1 && objColor.r != 1)
         {
-            render.enabled = true;
+            render.enabled = !triggerState;
             if (obj.CompareTag("Bullet"))
             {
                 obj.GetComponent<BoxCollider2D>().isTrigger = triggerState;

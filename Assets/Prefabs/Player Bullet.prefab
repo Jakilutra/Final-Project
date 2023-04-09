@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 484097582155854124}
   - component: {fileID: 8794256625950430317}
   - component: {fileID: 5913687895068528663}
-  m_Layer: 19
-  m_Name: Bullet
+  m_Layer: 18
+  m_Name: Player Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.75}
@@ -107,7 +107,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &5913687895068528663
 BoxCollider2D:
   m_ObjectHideFlags: 0
