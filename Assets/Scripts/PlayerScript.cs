@@ -56,7 +56,7 @@ public class PlayerScript : MonoBehaviour
                     { "BlueTeleport", false },
         };
         // deathCounter = 0;
-       //  deathPoint = 3;
+        //  deathPoint = 3;
     }
 
     // Finishes setting of player colour variables.
