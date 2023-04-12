@@ -15,7 +15,7 @@ public class EnemyScript : MonoBehaviour
     private int deathCounter;
     private float deathPoint;
     private Vector3 spawnPosition;
-    [SerializeField] private GameObject greenTeleport;
+    [SerializeField] private GameObject greenTeleport, health;
 
     // Assign variables (movement and damage counter).
 
@@ -46,6 +46,7 @@ public class EnemyScript : MonoBehaviour
             Vector2 direction = Player.transform.position - transform.position;
             if (deathCounter > 20)
             {
+                transform.localScale = new Vector3(2, 2, 1);
                 transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, -runSpeed * Time.deltaTime);
             }
             else
@@ -59,25 +60,11 @@ public class EnemyScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Game over event.
-
-        if (collision.gameObject.CompareTag("Player") && playerScript.activeColor != playerScript.colorWhite)
-        {
-            gameObject.SetActive(false);
-            FindObjectOfType<GameManager>().GameOver();
-        }
         EnemyDamage(collision.gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Game over event.
-
-        if (other.gameObject.CompareTag("Player") && playerScript.activeColor != playerScript.colorWhite)
-        {
-            gameObject.SetActive(false);
-            FindObjectOfType<GameManager>().GameOver();
-        }
         EnemyDamage(other.gameObject);
     }
 
@@ -89,26 +76,34 @@ public class EnemyScript : MonoBehaviour
         {
             deathCounter++;
             spawnPosition = transform.position;
-            if (obj != null)
+
+            if (obj != null && gameObject != null)
             {
                 StartCoroutine(playerScript.Flicker(gameObject));
             }
+
             if (deathCounter == deathPoint)
             {
-                if (obj != null)
-                {
-                    Destroy(obj);
-                }
-                if (obj != null)
+                if (obj != null && gameObject != null)
                 {
                     Destroy(gameObject);
                 }
+
+                // Spawn Green Teleport Ability from Big Enemy.
+
                 if (greenTeleport != null)
                 {
                     Instantiate(greenTeleport, spawnPosition, Quaternion.identity);
+                    return;
+                }
+
+                // Spawn Health from Big Enemy Clone.
+
+                if (gameObject.name == "Enemy(Clone)")
+                {
+                    Instantiate(health, spawnPosition, Quaternion.identity);
                 }
             }
         }
-
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5901672947250139518}
   - component: {fileID: 3292187841080176323}
   - component: {fileID: -8129252046687271900}
-  m_Layer: 23
+  m_Layer: 20
   m_Name: Green Teleport Ability
   m_TagString: Collectible
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4741158328886374877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.1783864, y: -1.1217579, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

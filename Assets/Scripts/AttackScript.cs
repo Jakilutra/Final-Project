@@ -64,7 +64,7 @@ public class AttackScript : MonoBehaviour
 
             // Destroy the bullet after a fixed amount of time.
 
-            Destroy(bulletClone.gameObject, expiry*scale);
+            Destroy(bulletClone.gameObject, expiry*Mathf.Sqrt(scale));
 
             // Reset enemy wait.
 

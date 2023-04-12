@@ -38,7 +38,8 @@ public class PlayerScript : MonoBehaviour
 
     // Declare player damage variables.
 
-    private int deathCounter, deathPoint;
+    private int deathCounter;
+    private bool pauseDamage;
 
     // Assigning variables (physics, colour, abilities and damage).
 
@@ -55,8 +56,8 @@ public class PlayerScript : MonoBehaviour
                     { "BlueWall", false },
                     { "BlueTeleport", false },
         };
-        // deathCounter = 0;
-        //  deathPoint = 3;
+        deathCounter = 0;
+        pauseDamage = false;
     }
 
     // Finishes setting of player colour variables.
@@ -94,31 +95,9 @@ public class PlayerScript : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // Color change event.
-
         if (Input.GetKeyDown(KeyCode.R))
         {
-            PolygonCollider2D playerCollider = GetComponent<PolygonCollider2D>();
-            bool collidingWithWall = playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && (playerCollider.IsTouchingLayers(LayerMask.GetMask("White Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Green Wall"))) && (body.velocity.x != 0 && body.velocity.y != 0);
-            if (colorChange.TryGetValue(activeColor, out Color newColor) && !playerCollider.isTrigger && !collidingWithWall)
-            {
-                activeColor = newColor;
-                render.color = newColor;
-                renderb.color = newColor;
-                speedChange.TryGetValue(newColor, out runSpeed);
-                if (newColor == colorWhite)
-                {
-                    gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
-                }
-                else
-                {
-                    gameObject.layer = LayerMask.NameToLayer("Player");
-                }
-            }
-            else
-            {
-                StartCoroutine(Flicker(gameObject));
-            }
+            ChangeColor();
         }
     }
 
@@ -131,14 +110,9 @@ public class PlayerScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            // Game over event.
-            gameObject.SetActive(false);
-            FindObjectOfType<GameManager>().GameOver();
-        }
+        PlayerDamage(collision.gameObject);
 
-        // Player upgrade events (via collectibles).
+        // Player upgrade/health restore events (via collectibles).
 
         if (collision.gameObject.CompareTag("Collectible"))
         {
@@ -161,10 +135,10 @@ public class PlayerScript : MonoBehaviour
                 whiteSafe.SetActive(true);
                 return;
             }
-            GameObject gTAClone = GameObject.Find(greenTeleportAbility.name + "(Clone)");
-            if (collision.gameObject == gTAClone)
+            string gTAClone = greenTeleportAbility.name + "(Clone)";
+            if (collision.gameObject.name == gTAClone)
             {
-                Destroy(gTAClone);
+                Destroy(collision.gameObject);
                 hasAbility["GreenTeleport"] = true;
                 greenTeleporter1.SetActive(true);
                 greenTeleporter2.SetActive(true);
@@ -176,17 +150,44 @@ public class PlayerScript : MonoBehaviour
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 6f;
             }
+            if (collision.gameObject.name == "Health" || collision.gameObject.name == "Health(Clone)")
+            {
+                deathCounter = 0;
+                Destroy(collision.gameObject);
+            }
         }
     }
 
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        PlayerDamage(other.gameObject);
+    }
+
+    // Color change event.
+
+    void ChangeColor()
+    {
+        PolygonCollider2D playerCollider = GetComponent<PolygonCollider2D>();
+        bool collidingWithWall = playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && (playerCollider.IsTouchingLayers(LayerMask.GetMask("White Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Green Wall"))) && (body.velocity.x != 0 && body.velocity.y != 0);
+        if (colorChange.TryGetValue(activeColor, out Color newColor) && !playerCollider.isTrigger && !collidingWithWall)
         {
-            // Game over event.
-            gameObject.SetActive(false);
-            FindObjectOfType<GameManager>().GameOver();
+            activeColor = newColor;
+            render.color = newColor;
+            renderb.color = newColor;
+            speedChange.TryGetValue(newColor, out runSpeed);
+            if (newColor == colorWhite)
+            {
+                gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+            }
+            else
+            {
+                gameObject.layer = LayerMask.NameToLayer("Player");
+            }
+        }
+        else
+        {
+            StartCoroutine(Flicker(gameObject));
         }
     }
 
@@ -197,4 +198,60 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         render.enabled = true;
     }
+
+    void PlayerDamage(GameObject obj)
+    {
+        if ((obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Enemy Bullet")) || obj.CompareTag("Enemy") && !pauseDamage)
+        {
+            deathCounter++;
+            if (obj != null)
+            {
+                switch (deathCounter)
+                {
+                    case 1:
+                        FlickerOrange();
+                        break;
+                    case 2:
+                        FlickerOrange();
+                        ChangeColor();
+                        break;
+                    case 3:
+                        // Game over event.
+                        gameObject.SetActive(false);
+                        FindObjectOfType<GameManager>().GameOver();
+                        break;
+                }
+            }
+        }
+    }
+
+    void FlickerOrange()
+    {
+        pauseDamage = true;
+        InvokeRepeating("SwitchOrange", 0.2f, 0.2f);
+        Invoke("CancelSwitchOrange", 2f);
+    }
+
+    void SwitchOrange()
+    {
+        SpriteRenderer render = GetComponent<SpriteRenderer>();
+        Color orange = new Color(1f, 0.5f, 0f);
+        if (render.color == activeColor)
+        {
+            render.color = orange;
+        }
+        else
+        {
+            render.color = activeColor;
+        }
+    }
+
+    void CancelSwitchOrange()
+    {
+        SpriteRenderer render = GetComponent<SpriteRenderer>();
+        CancelInvoke("SwitchOrange");
+        render.color = activeColor;
+        pauseDamage = false;
+    }
+
 }

@@ -8,10 +8,8 @@ public class WallScript : MonoBehaviour
     // Declaring variables.
 
     private SpriteRenderer render;
-    private BoxCollider2D wallCollider;
     private GameObject player;
     private PolygonCollider2D playerCollider;
-    private Rigidbody2D playerRigidbody;
 
     // Assigning variables.
 
@@ -20,7 +18,6 @@ public class WallScript : MonoBehaviour
         render = GetComponent<SpriteRenderer>();
         player = GameObject.FindWithTag("Player");
         playerCollider = player.GetComponent<PolygonCollider2D>();
-        playerRigidbody = player.GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -28,6 +25,8 @@ public class WallScript : MonoBehaviour
         // Player touching wall and changing colour check.
 
         BoxCollider2D wallCollider = GetComponent<BoxCollider2D>();
+        Rigidbody2D playerRigidbody = playerCollider.GetComponent<Rigidbody2D>();
+
         if (playerCollider.IsTouching(wallCollider))
         {
             bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && gameObject.layer == LayerMask.NameToLayer("White Wall");
@@ -36,13 +35,26 @@ public class WallScript : MonoBehaviour
             {
                 render.enabled = false;
                 playerCollider.isTrigger = true;
-
             }
             else if (playerRigidbody.velocity.x != 0f && playerRigidbody.velocity.y != 0f)
             {
                 playerCollider.isTrigger = false;
             }
         }
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null)
+            {
+                PolygonCollider2D enemyCollider = enemy.GetComponent<PolygonCollider2D>();
+                Rigidbody2D enemyRigidbody = enemyCollider.GetComponent<Rigidbody2D>();
+                if (enemyRigidbody.velocity.x != 0f && playerRigidbody.velocity.x != 0f && gameObject.layer != LayerMask.NameToLayer("Green Wall"))
+                {
+                    enemyCollider.isTrigger = false;
+                }
+            }
+        }
+
     }
 
     // Collision events.
