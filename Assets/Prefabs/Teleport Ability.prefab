@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3292187841080176323}
   - component: {fileID: -8129252046687271900}
   m_Layer: 20
-  m_Name: Green Teleport Ability
+  m_Name: Teleport Ability
   m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -22,10 +22,15 @@ public class AttackScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && gameObject.CompareTag("Player"))
         {
-            Fire("Player", playerScript.runSpeed * 5, Vector2.zero, Quaternion.identity, 0.3f, 1);
+            Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, Vector2.zero, Quaternion.identity, 0.3f, 1);
         }
         if (gameObject.CompareTag("Enemy") && bullet != null)
         {
+            SpriteRenderer rendereb = gameObject.GetComponent<SpriteRenderer>();
+
+            Color bulletColor = rendereb.color;
+            bulletColor.a = 0.5f;
+
             // Assigns distance, scale and direction variables.
 
             float distance = Vector2.Distance(transform.position, playerScript.transform.position);
@@ -47,12 +52,12 @@ public class AttackScript : MonoBehaviour
                 Vector3 position = new Vector3(Mathf.Cos(constrainedAngle), Mathf.Sin(constrainedAngle), 0);
                 Quaternion rotation = Quaternion.LookRotation(Vector3.forward, position);
 
-                Fire("Enemy", enemyScript.runSpeed * 5, position, rotation, 0.5f, scale);
+                Fire("Enemy", enemyScript.runSpeed * 5, bulletColor, position, rotation, 0.5f, scale);
             }
         }
     }
 
-    void Fire(string side, float bulletSpeed, Vector3 positionModifier, Quaternion rotationModifier, float expiry, float scale)
+    void Fire(string side, float bulletSpeed, Color bulletColor, Vector3 positionModifier, Quaternion rotationModifier, float expiry, float scale)
     {
         if (playerScript.activeColor != playerScript.colorWhite && (side != "Enemy" || waitCount >= waitPoint))
         {
@@ -62,6 +67,8 @@ public class AttackScript : MonoBehaviour
             Rigidbody2D bulletClone = Instantiate(bullet, transform.position + positionModifier, rotationModifier * Quaternion.Euler(0, 0, 90) * transform.rotation);
             bulletClone.velocity = rotationModifier * Quaternion.Euler(0,0,90) * transform.right * bulletSpeed;
 
+            bulletClone.GetComponent<SpriteRenderer>().color = bulletColor;
+
             // Destroy the bullet after a fixed amount of time.
 
             Destroy(bulletClone.gameObject, expiry*Mathf.Sqrt(scale));
@@ -70,6 +77,7 @@ public class AttackScript : MonoBehaviour
 
             waitTime = Random.Range(0f, 2f);
             waitCount = 0;
+            
         }
         else if (side == "Player")
         {

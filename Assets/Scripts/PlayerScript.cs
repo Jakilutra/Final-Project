@@ -19,7 +19,7 @@ public class PlayerScript : MonoBehaviour
     public Color activeColor;
     private SpriteRenderer render, renderb;
     public GameObject bullet;
-    private Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
+    public Dictionary<Color, Color> colorChange = new Dictionary<Color, Color>();
     public Color colorWhite = new Color(1f, 1f, 1f);
     public Color colorGreen = new Color(0.25f, 1f, 0.25f);
     public Color colorRed = new Color(1f, 0.25f, 0.25f);
@@ -32,7 +32,7 @@ public class PlayerScript : MonoBehaviour
 
     // Declare collectible, message and teleporter variables.
 
-    public GameObject greenWallAbility, greenTeleportAbility;
+    public GameObject greenWallAbility, redWallAbility;
     public GameObject matchColor, typeR, typeSpace, typeT, whiteSafe;
     public GameObject greenTeleporter1, greenTeleporter2;
 
@@ -135,7 +135,7 @@ public class PlayerScript : MonoBehaviour
                 whiteSafe.SetActive(true);
                 return;
             }
-            string gTAClone = greenTeleportAbility.name + "(Clone)";
+            string gTAClone = "Green Teleport Ability(Clone)";
             if (collision.gameObject.name == gTAClone)
             {
                 Destroy(collision.gameObject);
@@ -149,8 +149,37 @@ public class PlayerScript : MonoBehaviour
                 renderb.color = colorGreen;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 6f;
+                return;
             }
-            if (collision.gameObject.name == "Health" || collision.gameObject.name == "Health(Clone)")
+            if (collision.gameObject == redWallAbility)
+            {
+                Destroy(redWallAbility);
+                hasAbility["RedWall"] = true;
+                colorChange = new Dictionary<Color, Color>
+                {
+                    { colorWhite, colorGreen },
+                    { colorGreen, colorRed },
+                    { colorRed, colorWhite }
+                };
+                activeColor = colorRed;
+                render.color = colorRed;
+                renderb.color = colorRed;
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                runSpeed = 7f;
+            }
+            string rTAClone = "Red Teleport Ability(Clone)";
+            if (collision.gameObject.name == rTAClone)
+            {
+                Destroy(collision.gameObject);
+                hasAbility["RedTeleport"] = true;
+                activeColor = colorRed;
+                render.color = colorRed;
+                renderb.color = colorRed;
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                runSpeed = 7f;
+                return;
+            }
+            if (collision.gameObject.name.Substring(0,6) == "Health" || collision.gameObject.name == "Health(Clone)")
             {
                 deathCounter = 0;
                 Destroy(collision.gameObject);
@@ -206,6 +235,16 @@ public class PlayerScript : MonoBehaviour
             if ((obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Enemy Bullet")) || obj.CompareTag("Enemy"))
             {
                 deathCounter++;
+                SpriteRenderer rendereb = obj.GetComponent<SpriteRenderer>();
+                Color enemyBulletColor = rendereb.color;
+                if (enemyBulletColor.r == 1)
+                {
+                    deathCounter++;
+                }
+                if (enemyBulletColor.b == 1)
+                {
+                    deathCounter += 2;
+                }
                 if (obj != null)
                 {
                     switch (deathCounter)
@@ -215,9 +254,14 @@ public class PlayerScript : MonoBehaviour
                             break;
                         case 2:
                             FlickerOrange();
-                            ChangeColor();
+                            int attempts = 0;
+                            while (activeColor != colorWhite && attempts < 5)
+                            {
+                                ChangeColor();
+                                attempts++;
+                            }
                             break;
-                        case 3:
+                        default:
                             // Game over event.
                             gameObject.SetActive(false);
                             FindObjectOfType<GameManager>().GameOver();

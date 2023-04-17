@@ -12,18 +12,44 @@ using UnityEngine.SceneManagement;
     public GameObject gameOver;
     private GameObject[] findOthers = new GameObject[0]; // [array to add the rest of the game objects to deactivate]
 
+    private GameObject player, whiteTeleporter1, whiteTeleporter2;
+    private PlayerScript playerScript;
+    private float restartTime;
+
     void Start()
     {
         // findOthers[0] = GameObject.Find(""); // [adding to findOthers array]
+        player = GameObject.Find("Player");
+        whiteTeleporter1 = GameObject.Find("Teleporter 3");
+        whiteTeleporter2 = GameObject.Find("Teleporter 4");
+        playerScript = player.GetComponent<PlayerScript>();
+        restartTime = Time.time;
     }
 
     // Restart button
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKey(KeyCode.Alpha2) && Time.time < (restartTime + 1f))
         {
-          Restart();
+            player.transform.position = new Vector2(-20f, 21f);
+            playerScript.colorChange = new Dictionary<Color, Color>
+            {
+                { playerScript.colorWhite, playerScript.colorGreen },
+                { playerScript.colorGreen, playerScript.colorWhite },
+            };
+            playerScript.hasAbility["GreenWall"] = true;
+            playerScript.hasAbility["GreenTeleport"] = true;
+            playerScript.greenTeleporter1.SetActive(true);
+            playerScript.greenTeleporter2.SetActive(true);
+            playerScript.greenTeleporter1.GetComponent<SpriteRenderer>().enabled = true;
+            playerScript.greenTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
+            whiteTeleporter1.GetComponent<SpriteRenderer>().enabled = true;
+            whiteTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            Restart();
         }
     }
 

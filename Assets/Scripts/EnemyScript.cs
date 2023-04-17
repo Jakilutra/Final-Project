@@ -7,7 +7,8 @@ public class EnemyScript : MonoBehaviour
     // Declare variables (movement, damage counter and collectible spawn).
 
     private GameObject Player;
-    private Color enemyColor;
+    private SpriteRenderer render;
+    public Color enemyColor;
     public float calcColor, runSpeed;
     private Dictionary<float, float> enemyID = new Dictionary<float, float>();
     private float distance;
@@ -15,7 +16,7 @@ public class EnemyScript : MonoBehaviour
     private int deathCounter;
     private float deathPoint;
     private Vector3 spawnPosition;
-    [SerializeField] private GameObject greenTeleport, health;
+    [SerializeField] private GameObject teleportAbility, health;
 
     // Assign variables (movement and damage counter).
 
@@ -23,7 +24,8 @@ public class EnemyScript : MonoBehaviour
     {
         Player = GameObject.Find("Player");
         playerScript = FindObjectOfType<PlayerScript>();
-        enemyColor = gameObject.GetComponent<SpriteRenderer>().color;
+        render = gameObject.GetComponent<SpriteRenderer>();
+        enemyColor = render.color;
         calcColor = 3 * Mathf.Floor(enemyColor.r) + 2 * Mathf.Floor(enemyColor.g) + 1 * Mathf.Floor(enemyColor.b);
         enemyID = new Dictionary<float, float>
         {
@@ -33,7 +35,7 @@ public class EnemyScript : MonoBehaviour
         };
         enemyID.TryGetValue(calcColor, out runSpeed);
         deathCounter = 0;
-        deathPoint = Mathf.Pow(transform.localScale.x, 3f);
+        deathPoint = Mathf.Pow(transform.localScale.x, 3f) * (runSpeed - 1);
     }
 
     // Enemy movement.
@@ -44,7 +46,7 @@ public class EnemyScript : MonoBehaviour
         {
             distance = Vector2.Distance(transform.position, Player.transform.position);
             Vector2 direction = Player.transform.position - transform.position;
-            if (deathCounter > 20)
+            if (deathCounter > (20 *(runSpeed-1)))
             {
                 transform.localScale = new Vector3(2, 2, 1);
                 transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, -runSpeed * Time.deltaTime);
@@ -75,31 +77,53 @@ public class EnemyScript : MonoBehaviour
         if (obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Player Bullet"))
         {
             deathCounter++;
+            SpriteRenderer renderb = obj.GetComponent<SpriteRenderer>();
+            Color playerBulletColor = renderb.color;
+            if (playerBulletColor.r == 1)
+            {
+                deathCounter++;
+            }
+            if (playerBulletColor.b == 1)
+            {
+                deathCounter += 2;
+            }
             spawnPosition = transform.position;
 
             if (obj != null && gameObject != null)
             {
-                StartCoroutine(playerScript.Flicker(gameObject));
+                if (gameObject.activeSelf)
+                {
+                    StartCoroutine(playerScript.Flicker(gameObject));
+                }
             }
 
-            if (deathCounter == deathPoint)
+            if (deathCounter >= deathPoint)
             {
                 if (obj != null && gameObject != null)
                 {
                     Destroy(gameObject);
                 }
 
-                // Spawn Green Teleport Ability from Big Enemy.
+                // Spawn Teleport Ability from Big Enemy.
 
-                if (greenTeleport != null)
+                if (teleportAbility != null)
                 {
-                    Instantiate(greenTeleport, spawnPosition, Quaternion.identity);
+                    Dictionary<float, string> colorID = new Dictionary<float, string>
+                    {
+                        { 3, "Red" },
+                        { 2, "Green" },
+                        { 1, "Blue" },
+                    };
+                    colorID.TryGetValue(calcColor, out string colorName);
+                    GameObject abilityClone = Instantiate(teleportAbility, spawnPosition, Quaternion.identity);
+                    abilityClone.GetComponent<SpriteRenderer>().color = enemyColor;
+                    abilityClone.name = colorName + " Teleport Ability(Clone)";
                     return;
                 }
 
                 // Spawn Health from Big Enemy Clone.
 
-                if (gameObject.name == "Enemy(Clone)")
+                if (gameObject.name == "Enemy(Clone)" || gameObject.name.Substring(0,11) == "Red Triplet")
                 {
                     Instantiate(health, spawnPosition, Quaternion.identity);
                 }
