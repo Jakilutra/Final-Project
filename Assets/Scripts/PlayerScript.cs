@@ -201,25 +201,28 @@ public class PlayerScript : MonoBehaviour
 
     void PlayerDamage(GameObject obj)
     {
-        if ((obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Enemy Bullet")) || obj.CompareTag("Enemy") && !pauseDamage)
+        if (!pauseDamage)
         {
-            deathCounter++;
-            if (obj != null)
+            if ((obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Enemy Bullet")) || obj.CompareTag("Enemy"))
             {
-                switch (deathCounter)
+                deathCounter++;
+                if (obj != null)
                 {
-                    case 1:
-                        FlickerOrange();
-                        break;
-                    case 2:
-                        FlickerOrange();
-                        ChangeColor();
-                        break;
-                    case 3:
-                        // Game over event.
-                        gameObject.SetActive(false);
-                        FindObjectOfType<GameManager>().GameOver();
-                        break;
+                    switch (deathCounter)
+                    {
+                        case 1:
+                            FlickerOrange();
+                            break;
+                        case 2:
+                            FlickerOrange();
+                            ChangeColor();
+                            break;
+                        case 3:
+                            // Game over event.
+                            gameObject.SetActive(false);
+                            FindObjectOfType<GameManager>().GameOver();
+                            break;
+                    }
                 }
             }
         }
