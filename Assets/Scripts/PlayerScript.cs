@@ -40,6 +40,7 @@ public class PlayerScript : MonoBehaviour
 
     private int deathCounter;
     private bool pauseDamage;
+    private BlockScript blockScript;
 
     // Assigning variables (physics, colour, abilities and damage).
 
@@ -58,6 +59,7 @@ public class PlayerScript : MonoBehaviour
         };
         deathCounter = 0;
         pauseDamage = false;
+        blockScript = GetComponent<BlockScript>();
     }
 
     // Finishes setting of player colour variables.
@@ -237,7 +239,7 @@ public class PlayerScript : MonoBehaviour
 
     void PlayerDamage(GameObject obj)
     {
-        if (!pauseDamage)
+        if (!pauseDamage && !blockScript.blockOn)
         {
             if ((obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Enemy Bullet")) || obj.CompareTag("Enemy"))
             {

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5381832034983343638}
   - component: {fileID: -4602750514365038516}
   - component: {fileID: 5897543313144592397}
+  - component: {fileID: 4209676265636617826}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -157,7 +158,7 @@ MonoBehaviour:
   enemyColor: {r: 0, g: 0, b: 0, a: 0}
   calcColor: 0
   runSpeed: 0
-  greenTeleport: {fileID: 0}
+  teleportAbility: {fileID: 0}
   health: {fileID: 4561028812901335019, guid: 9bd958d4cff898845930d5218035f609, type: 3}
 --- !u!114 &5897543313144592397
 MonoBehaviour:
@@ -173,3 +174,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 8794256625950430317, guid: 0249dce796e076d4891e4e7cbded3718, type: 3}
   waitTime: 0
+--- !u!114 &4209676265636617826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706475965447576341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de33756864630b04d96f6ace8e9ba610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockOn: 0

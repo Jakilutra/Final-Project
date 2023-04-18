@@ -125,7 +125,10 @@ public class WallScript : MonoBehaviour
                 obj.GetComponent<PolygonCollider2D>().isTrigger = triggerState;
             }
         }
-        StartCoroutine(ReturnVisibility(obj));
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine(ReturnVisibility(obj));
+        }
     }
 
     IEnumerator ReturnVisibility(GameObject obj)

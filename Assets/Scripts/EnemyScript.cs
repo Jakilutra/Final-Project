@@ -13,6 +13,7 @@ public class EnemyScript : MonoBehaviour
     private Dictionary<float, float> enemyID = new Dictionary<float, float>();
     private float distance;
     private PlayerScript playerScript;
+    private BlockScript blockScript;
     private int deathCounter;
     private float deathPoint;
     private Vector3 spawnPosition;
@@ -36,6 +37,7 @@ public class EnemyScript : MonoBehaviour
         enemyID.TryGetValue(calcColor, out runSpeed);
         deathCounter = 0;
         deathPoint = Mathf.Pow(transform.localScale.x, 3f) * (runSpeed - 1);
+        blockScript = GetComponent<BlockScript>();
     }
 
     // Enemy movement.
@@ -72,58 +74,61 @@ public class EnemyScript : MonoBehaviour
 
     // Method to handle enemy damage.
 
-    void EnemyDamage (GameObject obj)
+    void EnemyDamage(GameObject obj)
     {
-        if (obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Player Bullet"))
+        if (!blockScript.blockOn)
         {
-            deathCounter++;
-            SpriteRenderer renderb = obj.GetComponent<SpriteRenderer>();
-            Color playerBulletColor = renderb.color;
-            if (playerBulletColor.r == 1)
+            if (obj.CompareTag("Bullet") && obj.layer == LayerMask.NameToLayer("Player Bullet"))
             {
                 deathCounter++;
-            }
-            if (playerBulletColor.b == 1)
-            {
-                deathCounter += 2;
-            }
-            spawnPosition = transform.position;
-
-            if (obj != null && gameObject != null)
-            {
-                if (gameObject.activeSelf)
+                SpriteRenderer renderb = obj.GetComponent<SpriteRenderer>();
+                Color playerBulletColor = renderb.color;
+                if (playerBulletColor.r == 1)
                 {
-                    StartCoroutine(playerScript.Flicker(gameObject));
+                    deathCounter++;
                 }
-            }
+                if (playerBulletColor.b == 1)
+                {
+                    deathCounter += 2;
+                }
+                spawnPosition = transform.position;
 
-            if (deathCounter >= deathPoint)
-            {
                 if (obj != null && gameObject != null)
                 {
-                    Destroy(gameObject);
-                }
-
-                // Spawn Teleport Ability from Big Enemy.
-
-                if (teleportAbility != null)
-                {
-                    Dictionary<float, string> colorID = new Dictionary<float, string>
+                    if (gameObject.activeSelf)
                     {
-                        { 3, "Red" },
-                        { 2, "Green" },
-                        { 1, "Blue" },
-                    };
-                    colorID.TryGetValue(calcColor, out string colorName);
-                    GameObject abilityClone = Instantiate(teleportAbility, spawnPosition, Quaternion.identity);
-                    abilityClone.GetComponent<SpriteRenderer>().color = enemyColor;
-                    abilityClone.name = colorName + " Teleport Ability(Clone)";
-                    return;
+                        StartCoroutine(playerScript.Flicker(gameObject));
+                    }
                 }
 
-                // Spawn Health from other enemies.
+                if (deathCounter >= deathPoint)
+                {
+                    if (obj != null && gameObject != null)
+                    {
+                        Destroy(gameObject);
+                    }
 
-                Instantiate(health, spawnPosition, Quaternion.identity);
+                    // Spawn Teleport Ability from Big Enemy.
+
+                    if (teleportAbility != null)
+                    {
+                        Dictionary<float, string> colorID = new Dictionary<float, string>
+                        {
+                            { 3, "Red" },
+                            { 2, "Green" },
+                            { 1, "Blue" },
+                        };
+                        colorID.TryGetValue(calcColor, out string colorName);
+                        GameObject abilityClone = Instantiate(teleportAbility, spawnPosition, Quaternion.identity);
+                        abilityClone.GetComponent<SpriteRenderer>().color = enemyColor;
+                        abilityClone.name = colorName + " Teleport Ability(Clone)";
+                        return;
+                    }
+
+                    // Spawn Health from other enemies.
+
+                    Instantiate(health, spawnPosition, Quaternion.identity);
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ public class AttackScript : MonoBehaviour
     // Update is called once per frame.
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space) && gameObject.CompareTag("Player"))
+        if (Input.GetKeyDown(KeyCode.Space) && gameObject.CompareTag("Player"))
         {
             Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, Vector2.zero, Quaternion.identity, 0.3f, 1);
         }
