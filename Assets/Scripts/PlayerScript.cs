@@ -133,6 +133,7 @@ public class PlayerScript : MonoBehaviour
                 typeR.SetActive(true);
                 typeSpace.SetActive(true);
                 whiteSafe.SetActive(true);
+                deathCounter = 0;
                 return;
             }
             string gTAClone = "Green Teleport Ability(Clone)";
@@ -149,6 +150,7 @@ public class PlayerScript : MonoBehaviour
                 renderb.color = colorGreen;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 6f;
+                deathCounter = 0;
                 return;
             }
             if (collision.gameObject == redWallAbility)
@@ -166,6 +168,8 @@ public class PlayerScript : MonoBehaviour
                 renderb.color = colorRed;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 7f;
+                deathCounter = 0;
+                return;
             }
             string rTAClone = "Red Teleport Ability(Clone)";
             if (collision.gameObject.name == rTAClone)
@@ -177,12 +181,8 @@ public class PlayerScript : MonoBehaviour
                 renderb.color = colorRed;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 7f;
-                return;
-            }
-            if (collision.gameObject.name.Substring(0,6) == "Health" || collision.gameObject.name == "Health(Clone)")
-            {
                 deathCounter = 0;
-                Destroy(collision.gameObject);
+                return;
             }
         }
     }
@@ -191,6 +191,11 @@ public class PlayerScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         PlayerDamage(other.gameObject);
+        if ((other.gameObject.name.Substring(0, 6) == "Health" || other.gameObject.name == "Health(Clone)") & deathCounter != 0)
+        {
+            deathCounter = 0;
+            Destroy(other.gameObject);
+        }
     }
 
     // Color change event.
@@ -198,8 +203,10 @@ public class PlayerScript : MonoBehaviour
     void ChangeColor()
     {
         PolygonCollider2D playerCollider = GetComponent<PolygonCollider2D>();
-        bool collidingWithWall = playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && (playerCollider.IsTouchingLayers(LayerMask.GetMask("White Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Green Wall"))) && (body.velocity.x != 0 && body.velocity.y != 0);
-        if (colorChange.TryGetValue(activeColor, out Color newColor) && !playerCollider.isTrigger && !collidingWithWall)
+        bool isMovingDiagonally = body.velocity.x != 0 && body.velocity.y != 0;
+        bool isTouchingColorWall = playerCollider.IsTouchingLayers(LayerMask.GetMask("White Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Green Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Red Wall")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Blue Wall"));
+        bool collidingWithWalls = playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && isTouchingColorWall && isMovingDiagonally;
+        if (colorChange.TryGetValue(activeColor, out Color newColor) && !playerCollider.isTrigger && !collidingWithWalls)
         {
             activeColor = newColor;
             render.color = newColor;

@@ -121,12 +121,9 @@ public class EnemyScript : MonoBehaviour
                     return;
                 }
 
-                // Spawn Health from Big Enemy Clone.
+                // Spawn Health from other enemies.
 
-                if (gameObject.name == "Enemy(Clone)" || gameObject.name.Substring(0,11) == "Red Triplet")
-                {
-                    Instantiate(health, spawnPosition, Quaternion.identity);
-                }
+                Instantiate(health, spawnPosition, Quaternion.identity);
             }
         }
     }

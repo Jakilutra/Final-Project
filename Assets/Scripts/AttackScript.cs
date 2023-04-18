@@ -20,7 +20,7 @@ public class AttackScript : MonoBehaviour
     // Update is called once per frame.
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && gameObject.CompareTag("Player"))
+        if (Input.GetKey(KeyCode.Space) && gameObject.CompareTag("Player"))
         {
             Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, Vector2.zero, Quaternion.identity, 0.3f, 1);
         }
@@ -57,7 +57,7 @@ public class AttackScript : MonoBehaviour
         }
     }
 
-    void Fire(string side, float bulletSpeed, Color bulletColor, Vector3 positionModifier, Quaternion rotationModifier, float expiry, float scale)
+    public void Fire(string side, float bulletSpeed, Color bulletColor, Vector3 positionModifier, Quaternion rotationModifier, float expiry, float scale)
     {
         if (playerScript.activeColor != playerScript.colorWhite && (side != "Enemy" || waitCount >= waitPoint))
         {

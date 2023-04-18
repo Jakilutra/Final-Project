@@ -9,6 +9,7 @@ public class TeleportScript : MonoBehaviour
     public Camera mainCamera;
     private GameObject player;
     private PlayerScript playerScript;
+    private AttackScript attackScript;
     [SerializeField] private GameObject bigGreenEnemy;
     private bool hasSpawned = false;
 
@@ -18,6 +19,7 @@ public class TeleportScript : MonoBehaviour
     {
         player = GameObject.Find("Player");
         playerScript = player.GetComponent<PlayerScript>();
+        attackScript = player.GetComponent<AttackScript>();
     }
 
     void Update ()
@@ -35,8 +37,10 @@ public class TeleportScript : MonoBehaviour
             foreach (GameObject teleporter in teleporters)
             {
                 bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && teleporter.layer == LayerMask.NameToLayer("White Teleporter");
-                bool greenCheck = player.layer == LayerMask.NameToLayer("Player") && teleporter.layer == LayerMask.NameToLayer("Green Teleporter") && playerScript.hasAbility["GreenTeleport"];
-                if (whiteCheck || greenCheck)
+                bool greenCheck = playerScript.activeColor == playerScript.colorGreen && teleporter.layer == LayerMask.NameToLayer("Green Teleporter") && playerScript.hasAbility["GreenTeleport"];
+                bool redCheck = playerScript.activeColor == playerScript.colorRed && teleporter.layer == LayerMask.NameToLayer("Red Teleporter") && playerScript.hasAbility["RedTeleport"];
+                bool blueCheck = playerScript.activeColor == playerScript.colorBlue && teleporter.layer == LayerMask.NameToLayer("Blue Teleporter") && playerScript.hasAbility["BlueTeleport"];
+                if (whiteCheck || greenCheck || redCheck || blueCheck)
                 {
                     Vector3 targetPosition = mainCamera.WorldToViewportPoint(teleporter.transform.position);
 
@@ -59,7 +63,17 @@ public class TeleportScript : MonoBehaviour
             }
             if (spriteRenderer1 != null && spriteRenderer2 != null && !teleporterLocation.Equals(default))
             {
-                transform.position = teleporterLocation;
+                // Check to see if the bullet or the player is being teleported.
+
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    attackScript.Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, teleporterLocation - transform.position, Quaternion.identity, 0.3f, 1);
+                    return;
+                }
+                else
+                {
+                    transform.position = teleporterLocation;
+                }
                 spriteRenderer1.enabled = false;
                 spriteRenderer2.enabled = true;
                 if (teleporterLocation == new Vector3 (-16,0,0) && !hasSpawned)

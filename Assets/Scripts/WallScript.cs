@@ -9,6 +9,7 @@ public class WallScript : MonoBehaviour
 
     private SpriteRenderer render;
     private GameObject player;
+    private PlayerScript playerScript;
     private PolygonCollider2D playerCollider;
 
     // Assigning variables.
@@ -17,6 +18,7 @@ public class WallScript : MonoBehaviour
     {
         render = GetComponent<SpriteRenderer>();
         player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<PlayerScript>();
         playerCollider = player.GetComponent<PolygonCollider2D>();
     }
 
@@ -30,17 +32,25 @@ public class WallScript : MonoBehaviour
         if (playerCollider.IsTouching(wallCollider))
         {
             bool whiteCheck = player.layer == LayerMask.NameToLayer("IgnorePlayer") && gameObject.layer == LayerMask.NameToLayer("White Wall");
-            bool greenCheck = player.layer == LayerMask.NameToLayer("Player") && gameObject.layer == LayerMask.NameToLayer("Green Wall");
-            if (whiteCheck || greenCheck)
+            bool greenCheck = playerScript.activeColor == playerScript.colorGreen && gameObject.layer == LayerMask.NameToLayer("Green Wall");
+            bool redCheck = playerScript.activeColor == playerScript.colorRed && gameObject.layer == LayerMask.NameToLayer("Red Wall");
+            bool blueCheck = playerScript.activeColor == playerScript.colorBlue && gameObject.layer == LayerMask.NameToLayer("Blue Wall");
+
+            if (whiteCheck || greenCheck || redCheck || blueCheck)
             {
                 render.enabled = false;
                 playerCollider.isTrigger = true;
             }
+            // Turn Trigger off if player is moving diagonally and not touching a coloured wall.
+
             else if (playerRigidbody.velocity.x != 0f && playerRigidbody.velocity.y != 0f)
             {
                 playerCollider.isTrigger = false;
             }
         }
+
+        // Turn Trigger off if enemy  is moving diagonally and not touching a coloured wall.
+
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemy in enemies)
         {
@@ -48,7 +58,7 @@ public class WallScript : MonoBehaviour
             {
                 PolygonCollider2D enemyCollider = enemy.GetComponent<PolygonCollider2D>();
                 Rigidbody2D enemyRigidbody = enemyCollider.GetComponent<Rigidbody2D>();
-                if (enemyRigidbody.velocity.x != 0f && playerRigidbody.velocity.x != 0f && gameObject.layer != LayerMask.NameToLayer("Green Wall"))
+                if (enemyRigidbody.velocity.x != 0f && enemyRigidbody.velocity.y != 0f && gameObject.layer != LayerMask.NameToLayer("Green Wall") && gameObject.layer != LayerMask.NameToLayer("Red Wall") && gameObject.layer != LayerMask.NameToLayer("Blue Wall"))
                 {
                     enemyCollider.isTrigger = false;
                 }
@@ -91,5 +101,40 @@ public class WallScript : MonoBehaviour
                 obj.GetComponent<PolygonCollider2D>().isTrigger = triggerState;
             }
         }
+        if (gameObject.layer == LayerMask.NameToLayer("Red Wall") && objColor.g != 1 && objColor.r == 1)
+        {
+            render.enabled = !triggerState;
+            if (obj.CompareTag("Bullet"))
+            {
+                obj.GetComponent<BoxCollider2D>().isTrigger = triggerState;
+            }
+            else
+            {
+                obj.GetComponent<PolygonCollider2D>().isTrigger = triggerState;
+            }
+        }
+        if (gameObject.layer == LayerMask.NameToLayer("Blue Wall") && objColor.b == 1 && objColor.r != 1)
+        {
+            render.enabled = !triggerState;
+            if (obj.CompareTag("Bullet"))
+            {
+                obj.GetComponent<BoxCollider2D>().isTrigger = triggerState;
+            }
+            else
+            {
+                obj.GetComponent<PolygonCollider2D>().isTrigger = triggerState;
+            }
+        }
+        StartCoroutine(ReturnVisibility(obj));
     }
+
+    IEnumerator ReturnVisibility(GameObject obj)
+    {
+        yield return new WaitForSeconds(0.6f);
+        if (obj == null)
+        {
+            render.enabled = true;
+        }
+    }
+
 }

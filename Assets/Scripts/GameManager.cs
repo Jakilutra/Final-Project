@@ -32,7 +32,7 @@ using UnityEngine.SceneManagement;
     {
         if (Input.GetKey(KeyCode.Alpha2) && Time.time < (restartTime + 1f))
         {
-            player.transform.position = new Vector2(-20f, 21f);
+            player.transform.position = new Vector2(-16f, 25f);
             playerScript.colorChange = new Dictionary<Color, Color>
             {
                 { playerScript.colorWhite, playerScript.colorGreen },
