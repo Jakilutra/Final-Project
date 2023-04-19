@@ -7434,6 +7434,12 @@ PrefabInstance:
         type: 3}
     - target: {fileID: -6634707357153713957, guid: 17d66c184bcc30f46bf9d0c123b7b84a,
         type: 3}
+      propertyPath: arialFont
+      value: 
+      objectReference: {fileID: 12800000, guid: 6f74a3b1e0dedce4d9aa6ec0bfeeffc7,
+        type: 3}
+    - target: {fileID: -6634707357153713957, guid: 17d66c184bcc30f46bf9d0c123b7b84a,
+        type: 3}
       propertyPath: typeSpace
       value: 
       objectReference: {fileID: 1559404294}

@@ -46,6 +46,7 @@ using UnityEngine.SceneManagement;
             playerScript.greenTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
             whiteTeleporter1.GetComponent<SpriteRenderer>().enabled = true;
             whiteTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
+            playerScript.UpdateOverlay();
         }
         else if (Input.GetKeyDown(KeyCode.P))
         {

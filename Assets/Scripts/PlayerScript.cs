@@ -49,6 +49,7 @@ public class PlayerScript : MonoBehaviour
     private Text textComponent;
     public int points;
     private int damagedCount;
+    public Font arialFont;
 
     // Assigning variables (physics, colour, abilities, damage and points).
 
@@ -72,6 +73,7 @@ public class PlayerScript : MonoBehaviour
         textComponent = textObj.GetComponent<Text>();
         points = 0;
         damagedCount = 0;
+        UpdateOverlay();
     }
 
     // Finishes setting of player colour variables.
@@ -331,6 +333,8 @@ public class PlayerScript : MonoBehaviour
 
     public void UpdateOverlay()
     {
+        textComponent.font = arialFont;
+
         string healthText = "      Health: ";
         int health = 3 - deathCounter;
         for (int i = 0; i < health; i++)
@@ -361,7 +365,6 @@ public class PlayerScript : MonoBehaviour
         tAbilityText += hasAbility["GreenTeleport"] ? "<color=green>● </color>" : "";
         tAbilityText += hasAbility["RedTeleport"] ? "<color=red>● </color>" : "";
         tAbilityText += hasAbility["BlueTeleport"] ? "<color=blue>● </color>" : "";
-
 
         textComponent.text = healthText 
                             + pointsText 
