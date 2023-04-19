@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -42,7 +43,13 @@ public class PlayerScript : MonoBehaviour
     private bool pauseDamage;
     private BlockScript blockScript;
 
-    // Assigning variables (physics, colour, abilities and damage).
+    // Overlay variables
+
+    private GameObject textObj;
+    private Text textComponent;
+    private int points, damagedCount;
+
+    // Assigning variables (physics, colour, abilities, damage and points).
 
     void Start()
     {
@@ -60,6 +67,10 @@ public class PlayerScript : MonoBehaviour
         deathCounter = 0;
         pauseDamage = false;
         blockScript = GetComponent<BlockScript>();
+        textObj = GameObject.Find("Text");
+        textComponent = textObj.GetComponent<Text>();
+        points = 0;
+        damagedCount = 0;
     }
 
     // Finishes setting of player colour variables.
@@ -136,6 +147,7 @@ public class PlayerScript : MonoBehaviour
                 typeSpace.SetActive(true);
                 whiteSafe.SetActive(true);
                 deathCounter = 0;
+                UpdateOverlay();
                 return;
             }
             string gTAClone = "Green Teleport Ability(Clone)";
@@ -153,6 +165,7 @@ public class PlayerScript : MonoBehaviour
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 6f;
                 deathCounter = 0;
+                UpdateOverlay();
                 return;
             }
             if (collision.gameObject == redWallAbility)
@@ -171,6 +184,7 @@ public class PlayerScript : MonoBehaviour
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 7f;
                 deathCounter = 0;
+                UpdateOverlay();
                 return;
             }
             string rTAClone = "Red Teleport Ability(Clone)";
@@ -184,6 +198,7 @@ public class PlayerScript : MonoBehaviour
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 runSpeed = 7f;
                 deathCounter = 0;
+                UpdateOverlay();
                 return;
             }
         }
@@ -196,6 +211,7 @@ public class PlayerScript : MonoBehaviour
         if ((other.gameObject.name.Substring(0, 6) == "Health" || other.gameObject.name == "Health(Clone)") & deathCounter != 0)
         {
             deathCounter = 0;
+            UpdateOverlay();
             Destroy(other.gameObject);
         }
     }
@@ -254,6 +270,8 @@ public class PlayerScript : MonoBehaviour
                 {
                     deathCounter += 2;
                 }
+                damagedCount++;
+                UpdateOverlay();
                 if (obj != null)
                 {
                     switch (deathCounter)
@@ -308,6 +326,44 @@ public class PlayerScript : MonoBehaviour
         CancelInvoke("SwitchOrange");
         render.color = activeColor;
         pauseDamage = false;
+    }
+
+    void UpdateOverlay()
+    {
+        string healthText = "      Health: ";
+        int health = 3 - deathCounter;
+        for (int i = 0; i < health; i++)
+        {
+            healthText += "♥";
+        }
+        string pointsText = "\n      Points: " + points;
+        string damageText = "\n Times Hit: " + damagedCount;
+
+        string rAbilityText = "";
+        if (hasAbility["GreenWall"] || hasAbility["RedWall"] || hasAbility["BlueWall"])
+        {
+            rAbilityText = "\nR Abilities: ";
+        }
+        rAbilityText += hasAbility["GreenWall"] ? "<color=green>■ </color>" : "";
+        rAbilityText += hasAbility["RedWall"] ? "<color=red>■ </color>" : "";
+        rAbilityText += hasAbility["BlueWall"] ? "<color=blue>■ </color>" : "";
+
+        string tAbilityText = "";
+        if (hasAbility["GreenTeleport"] || hasAbility["RedTeleport"] || hasAbility["BlueTeleport"])
+        {
+            tAbilityText = "\n T Abilities: ";
+        }
+        tAbilityText += hasAbility["GreenTeleport"] ? "<color=green>● </color>" : "";
+        tAbilityText += hasAbility["RedTeleport"] ? "<color=red>● </color>" : "";
+        tAbilityText += hasAbility["BlueTeleport"] ? "<color=blue>● </color>" : "";
+
+
+        textComponent.text = healthText 
+                            + pointsText 
+                            + damageText 
+                            + "\n"
+                            + rAbilityText 
+                            + tAbilityText;
     }
 
 }
