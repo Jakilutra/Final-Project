@@ -105,7 +105,22 @@ public class EnemyScript : MonoBehaviour
                 {
                     if (obj != null && gameObject != null)
                     {
+                        int scale = Mathf.RoundToInt(gameObject.transform.localScale.x);
+                        scale = scale == 2 ? 3 : scale;
                         Destroy(gameObject);
+                        if (enemyColor.g == 1)
+                        {
+                            playerScript.points += 100 * scale;
+                        }
+                        if (enemyColor.r == 1)
+                        {
+                            playerScript.points += 300 * scale;
+                        }
+                        if (enemyColor.b == 1)
+                        {
+                            playerScript.points += 600 * scale;
+                        }
+                        playerScript.UpdateOverlay();
                     }
 
                     // Spawn Teleport Ability from Big Enemy.

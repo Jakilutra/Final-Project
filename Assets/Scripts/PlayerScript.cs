@@ -47,7 +47,8 @@ public class PlayerScript : MonoBehaviour
 
     private GameObject textObj;
     private Text textComponent;
-    private int points, damagedCount;
+    public int points;
+    private int damagedCount;
 
     // Assigning variables (physics, colour, abilities, damage and points).
 
@@ -328,13 +329,17 @@ public class PlayerScript : MonoBehaviour
         pauseDamage = false;
     }
 
-    void UpdateOverlay()
+    public void UpdateOverlay()
     {
         string healthText = "      Health: ";
         int health = 3 - deathCounter;
         for (int i = 0; i < health; i++)
         {
-            healthText += "♥";
+            healthText += "<color=red>♥</color>";
+        }
+        for (int j = 0; j < deathCounter; j++)
+        {
+            healthText += "<color=grey>♥</color>";
         }
         string pointsText = "\n      Points: " + points;
         string damageText = "\n Times Hit: " + damagedCount;
