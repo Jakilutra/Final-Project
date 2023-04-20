@@ -103,9 +103,10 @@ public class EnemyScript : MonoBehaviour
 
                 if (deathCounter >= deathPoint)
                 {
+                    int scale = Mathf.RoundToInt(gameObject.transform.localScale.x);
+
                     if (obj != null && gameObject != null)
                     {
-                        int scale = Mathf.RoundToInt(gameObject.transform.localScale.x);
                         scale = scale == 2 ? 3 : scale;
                         Destroy(gameObject);
                         if (enemyColor.g == 1)
@@ -142,7 +143,8 @@ public class EnemyScript : MonoBehaviour
 
                     // Spawn Health from other enemies.
 
-                    Instantiate(health, spawnPosition, Quaternion.identity);
+                    GameObject healthClone = Instantiate(health, spawnPosition, Quaternion.identity);
+                    healthClone.transform.localScale = new Vector3(scale, scale, scale);
                 }
             }
         }
