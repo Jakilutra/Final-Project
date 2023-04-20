@@ -45,11 +45,15 @@ public class PlayerScript : MonoBehaviour
 
     // Overlay variables
 
-    private GameObject textObj;
+    private GameObject textObj, background;
     private Text textComponent;
     public int points;
     private int damagedCount;
     public Font arialFont;
+    private RectTransform rectTransform;
+    private Vector3 originalPosition;
+    private Vector2 originalDelta;
+
 
     // Assigning variables (physics, colour, abilities, damage and points).
 
@@ -71,8 +75,12 @@ public class PlayerScript : MonoBehaviour
         blockScript = GetComponent<BlockScript>();
         textObj = GameObject.Find("Text");
         textComponent = textObj.GetComponent<Text>();
+        background = GameObject.Find("Background");
+        rectTransform = background.GetComponent<RectTransform>();
         points = 0;
         damagedCount = 0;
+        originalPosition = rectTransform.position;
+        originalDelta = rectTransform.sizeDelta;
         UpdateOverlay();
     }
 
@@ -213,7 +221,8 @@ public class PlayerScript : MonoBehaviour
         PlayerDamage(other.gameObject);
         if ((other.gameObject.name.Substring(0, 6) == "Health" || other.gameObject.name == "Health(Clone)") & deathCounter != 0)
         {
-            deathCounter = 0;
+            deathCounter-= 1 * Mathf.RoundToInt(other.gameObject.transform.localScale.x);
+            deathCounter = deathCounter < 0 ? 0 : deathCounter;
             UpdateOverlay();
             Destroy(other.gameObject);
         }
@@ -279,10 +288,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     switch (deathCounter)
                     {
-                        case 1:
-                            FlickerOrange();
-                            break;
-                        case 2:
+                        case 4:
                             FlickerOrange();
                             int attempts = 0;
                             while (activeColor != colorWhite && attempts < 5)
@@ -291,10 +297,13 @@ public class PlayerScript : MonoBehaviour
                                 attempts++;
                             }
                             break;
-                        default:
+                        case 5:
                             // Game over event.
                             gameObject.SetActive(false);
                             FindObjectOfType<GameManager>().GameOver();
+                            break;
+                        default:
+                            FlickerOrange();
                             break;
                     }
                 }
@@ -335,8 +344,11 @@ public class PlayerScript : MonoBehaviour
     {
         textComponent.font = arialFont;
 
+        rectTransform.position = originalPosition;
+        rectTransform.sizeDelta = originalDelta;
+
         string healthText = "      Health: ";
-        int health = 3 - deathCounter;
+        int health = 5 - deathCounter;
         for (int i = 0; i < health; i++)
         {
             healthText += "<color=red>♥</color>";
@@ -353,6 +365,15 @@ public class PlayerScript : MonoBehaviour
         {
             rAbilityText = "\nR Abilities: ";
         }
+        else
+        {
+            Vector3 position = rectTransform.position;
+            Vector2 delta = rectTransform.sizeDelta;
+            position.y += 75f;
+            delta.y -= 150f;
+            rectTransform.position = position;
+            rectTransform.sizeDelta = delta;
+        }
         rAbilityText += hasAbility["GreenWall"] ? "<color=green>■ </color>" : "";
         rAbilityText += hasAbility["RedWall"] ? "<color=red>■ </color>" : "";
         rAbilityText += hasAbility["BlueWall"] ? "<color=blue>■ </color>" : "";
@@ -361,6 +382,15 @@ public class PlayerScript : MonoBehaviour
         if (hasAbility["GreenTeleport"] || hasAbility["RedTeleport"] || hasAbility["BlueTeleport"])
         {
             tAbilityText = "\n T Abilities: ";
+        }
+        else
+        {
+            Vector3 position = rectTransform.position;
+            Vector2 delta = rectTransform.sizeDelta;
+            position.y += 38f;
+            delta.y -= 75f;
+            rectTransform.position = position;
+            rectTransform.sizeDelta = delta;
         }
         tAbilityText += hasAbility["GreenTeleport"] ? "<color=green>● </color>" : "";
         tAbilityText += hasAbility["RedTeleport"] ? "<color=red>● </color>" : "";

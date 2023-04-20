@@ -202,8 +202,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 838, y: -306}
-  m_SizeDelta: {x: 500, y: 400}
+  m_AnchoredPosition: {x: 320, y: -320}
+  m_SizeDelta: {x: 500, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &111287353
 CanvasRenderer:
@@ -235,18 +235,19 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
+    m_FontSize: 60
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 50
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "      Health: \u2665\u2665\u2665\n      Points: 0\n Times Hit: 0"
+  m_Text: "      Health: \u2665\u2665\u2665\u2665\u2665\n      Points: 0\n Times
+    Hit: 0"
 --- !u!1001 &166664604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4210,8 +4211,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 758, y: -246}
-  m_SizeDelta: {x: 400, y: 350}
+  m_AnchoredPosition: {x: 330, y: -300}
+  m_SizeDelta: {x: 550, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1662883338
 MonoBehaviour:
