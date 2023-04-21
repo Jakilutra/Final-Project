@@ -160,6 +160,7 @@ MonoBehaviour:
   runSpeed: 0
   teleportAbility: {fileID: 0}
   health: {fileID: 4561028812901335019, guid: 9bd958d4cff898845930d5218035f609, type: 3}
+  mainCamera: {fileID: 0}
 --- !u!114 &5897543313144592397
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    // Declare variables (movement, damage counter and collectible spawn).
+    // Declare variables (movement, damage counter, collectible spawn and camera).
 
     private GameObject Player;
     private SpriteRenderer render;
@@ -18,6 +18,7 @@ public class EnemyScript : MonoBehaviour
     private float deathPoint;
     private Vector3 spawnPosition;
     [SerializeField] private GameObject teleportAbility, health;
+    private Camera mainCamera;
 
     // Assign variables (movement and damage counter).
 
@@ -38,6 +39,7 @@ public class EnemyScript : MonoBehaviour
         deathCounter = 0;
         deathPoint = Mathf.Pow(transform.localScale.x, 3f) * (runSpeed - 1);
         blockScript = GetComponent<BlockScript>();
+        mainCamera = Camera.main;
     }
 
     // Enemy movement.
@@ -48,12 +50,15 @@ public class EnemyScript : MonoBehaviour
         {
             distance = Vector2.Distance(transform.position, Player.transform.position);
             Vector2 direction = Player.transform.position - transform.position;
-            if (deathCounter > (20 *(runSpeed-1)))
+            float scale = transform.localScale.x;
+            Vector3 targetPosition = mainCamera.WorldToViewportPoint(transform.position);
+
+            if (deathCounter > (18 *(runSpeed-1)))
             {
                 transform.localScale = new Vector3(2, 2, 1);
                 transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, -runSpeed * Time.deltaTime);
             }
-            else
+            else if (targetPosition.x >= 0 && targetPosition.x <= 1.2*scale && targetPosition.y >= 0 && targetPosition.y <= 1.2*scale)
             {
                 transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, runSpeed * Time.deltaTime);
             }

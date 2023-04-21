@@ -11,6 +11,7 @@ TagManager:
   - Teleporter
   - Floor
   - Bullet
+  - FakeWall
   layers:
   - Default
   - TransparentFX

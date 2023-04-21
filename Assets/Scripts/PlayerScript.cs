@@ -51,7 +51,6 @@ public class PlayerScript : MonoBehaviour
     private int damagedCount;
     public Font arialFont;
     private RectTransform rectTransform;
-    private Vector3 originalPosition;
     private Vector2 originalDelta;
 
 
@@ -79,7 +78,6 @@ public class PlayerScript : MonoBehaviour
         rectTransform = background.GetComponent<RectTransform>();
         points = 0;
         damagedCount = 0;
-        originalPosition = rectTransform.position;
         originalDelta = rectTransform.sizeDelta;
         UpdateOverlay();
     }
@@ -282,6 +280,10 @@ public class PlayerScript : MonoBehaviour
                 {
                     deathCounter += 2;
                 }
+                if (deathCounter > 5)
+                {
+                    deathCounter = 5;
+                }
                 damagedCount++;
                 UpdateOverlay();
                 if (obj != null)
@@ -344,7 +346,6 @@ public class PlayerScript : MonoBehaviour
     {
         textComponent.font = arialFont;
 
-        rectTransform.position = originalPosition;
         rectTransform.sizeDelta = originalDelta;
 
         string healthText = "      Health: ";
@@ -367,11 +368,8 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
-            Vector3 position = rectTransform.position;
             Vector2 delta = rectTransform.sizeDelta;
-            position.y += 75f;
             delta.y -= 150f;
-            rectTransform.position = position;
             rectTransform.sizeDelta = delta;
         }
         rAbilityText += hasAbility["GreenWall"] ? "<color=green>■ </color>" : "";
@@ -385,11 +383,8 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
-            Vector3 position = rectTransform.position;
             Vector2 delta = rectTransform.sizeDelta;
-            position.y += 38f;
             delta.y -= 75f;
-            rectTransform.position = position;
             rectTransform.sizeDelta = delta;
         }
         tAbilityText += hasAbility["GreenTeleport"] ? "<color=green>● </color>" : "";

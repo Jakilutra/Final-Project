@@ -48,6 +48,27 @@ using UnityEngine.SceneManagement;
             whiteTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
             playerScript.UpdateOverlay();
         }
+        else if (Input.GetKey(KeyCode.Alpha3) && Time.time < (restartTime + 1f))
+        {
+            player.transform.position = new Vector2(15f, 52f);
+            playerScript.colorChange = new Dictionary<Color, Color>
+            {
+                { playerScript.colorWhite, playerScript.colorGreen },
+                { playerScript.colorGreen, playerScript.colorRed },
+                { playerScript.colorRed, playerScript.colorWhite },
+            };
+            playerScript.hasAbility["GreenWall"] = true;
+            playerScript.hasAbility["RedWall"] = true;
+            playerScript.hasAbility["GreenTeleport"] = true;
+            playerScript.hasAbility["RedTeleport"] = true;
+            playerScript.greenTeleporter1.SetActive(true);
+            playerScript.greenTeleporter2.SetActive(true);
+            playerScript.greenTeleporter1.GetComponent<SpriteRenderer>().enabled = true;
+            playerScript.greenTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
+            whiteTeleporter1.GetComponent<SpriteRenderer>().enabled = true;
+            whiteTeleporter2.GetComponent<SpriteRenderer>().enabled = false;
+            playerScript.UpdateOverlay();
+        }
         else if (Input.GetKeyDown(KeyCode.P))
         {
             Restart();
@@ -65,6 +86,7 @@ using UnityEngine.SceneManagement;
             Deactivate("Collectible");
             Deactivate("Enemy");
             Deactivate("Floor");
+            Deactivate("FakeWall");
             Deactivate("Message");
             Deactivate("Teleporter");
             Deactivate("Wall");
