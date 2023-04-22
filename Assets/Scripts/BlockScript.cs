@@ -25,7 +25,7 @@ public class BlockScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && gameObject.CompareTag("Player"))
+        if (Input.GetKeyDown(KeyCode.Q) && gameObject.CompareTag("Player") && playerScript.activeColor != playerScript.colorWhite && playerScript.activeColor != playerScript.colorGreen)
         {
             if (blockWait <= 0f)
             {

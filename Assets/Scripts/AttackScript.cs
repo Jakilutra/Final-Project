@@ -7,6 +7,7 @@ public class AttackScript : MonoBehaviour
     public Rigidbody2D bullet;
     private PlayerScript playerScript;
     private EnemyScript enemyScript;
+    private BlockScript blockScript;
     public float waitTime = 0;
     private int waitCount = 0, waitPoint = 3;
 
@@ -14,15 +15,29 @@ public class AttackScript : MonoBehaviour
     {
         playerScript = FindObjectOfType<PlayerScript>();
         enemyScript = FindObjectOfType<EnemyScript>();
+        blockScript = FindObjectOfType<BlockScript>();
         waitTime = Random.Range(0f, 2f);
     }
 
     // Update is called once per frame.
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && gameObject.CompareTag("Player"))
+        if (gameObject.CompareTag("Player"))
         {
-            Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, Vector2.zero, Quaternion.identity, 0.3f, 1);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, Vector2.zero, Quaternion.identity, 0.3f, 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && playerScript.activeColor == playerScript.colorBlue)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, transform.rotation * Vector2.up, Quaternion.identity, 0.5f, 1);
+                    Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, transform.rotation * Vector2.right, Quaternion.AngleAxis(-90, Vector3.forward), 0.5f, 1);
+                    Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, transform.rotation * Vector2.down, Quaternion.AngleAxis(180, Vector3.forward), 0.5f, 1);
+                    Fire("Player", playerScript.runSpeed * 5, playerScript.activeColor, transform.rotation * Vector2.left, Quaternion.AngleAxis(90, Vector3.forward), 0.5f, 1);
+                }
+            }
         }
         if (gameObject.CompareTag("Enemy") && bullet != null)
         {
@@ -37,7 +52,7 @@ public class AttackScript : MonoBehaviour
             float scale = transform.localScale.x;
             Vector2 direction = (playerScript.transform.position) - this.transform.position;
 
-            if (distance < scale*6)
+            if (distance < scale * 6)
             {
 
                 // Increments the enemy wait time.
@@ -52,7 +67,22 @@ public class AttackScript : MonoBehaviour
                 Vector3 position = new Vector3(Mathf.Cos(constrainedAngle), Mathf.Sin(constrainedAngle), 0);
                 Quaternion rotation = Quaternion.LookRotation(Vector3.forward, position);
 
-                Fire("Enemy", enemyScript.runSpeed * 5, bulletColor, position, rotation, 0.5f, scale);
+                if (scale < 5)
+                {
+                    Fire("Enemy", enemyScript.runSpeed * 5, bulletColor, position, rotation, 0.5f, scale);
+                }
+                else
+                {
+                    int speedModifier;
+                    speedModifier = blockScript.blockOn ? 5 : 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Fire("Enemy", enemyScript.runSpeed * speedModifier, bulletColor, position, rotation, 0.5f, 1);
+                        waitCount = waitPoint;
+                    }
+                    waitTime = Random.Range(0f, 2f);
+                    waitCount = 0;
+                }
             }
         }
     }

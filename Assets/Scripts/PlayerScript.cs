@@ -6,6 +6,10 @@ using UnityEngine.UI;
 public class PlayerScript : MonoBehaviour
 {
 
+    // Declare Game Manager Script.
+
+    private GameManager gameManager;
+    
     // Declare player physics/movement variables.
 
     Rigidbody2D body;
@@ -33,7 +37,7 @@ public class PlayerScript : MonoBehaviour
 
     // Declare collectible, message and teleporter variables.
 
-    public GameObject greenWallAbility, redWallAbility;
+    public GameObject greenWallAbility, redWallAbility, blueWallAbility;
     public GameObject matchColor, typeR, typeSpace, typeT, whiteSafe;
     public GameObject greenTeleporter1, greenTeleporter2;
 
@@ -53,11 +57,10 @@ public class PlayerScript : MonoBehaviour
     private RectTransform rectTransform;
     private Vector2 originalDelta;
 
-
-    // Assigning variables (physics, colour, abilities, damage and points).
-
     void Start()
     {
+        // Assigning variables (game manager, physics, colour, abilities, damage and points).
+        gameManager = FindObjectOfType<GameManager>();
         body = GetComponent<Rigidbody2D>();
         ColorChangeSetUp();
         hasAbility = new Dictionary<string, bool>
@@ -71,14 +74,18 @@ public class PlayerScript : MonoBehaviour
         };
         deathCounter = 0;
         pauseDamage = false;
+        points = 0;
+        damagedCount = 0;
+
+        // Assigning overlay variables
+
         blockScript = GetComponent<BlockScript>();
         textObj = GameObject.Find("Text");
         textComponent = textObj.GetComponent<Text>();
         background = GameObject.Find("Background");
         rectTransform = background.GetComponent<RectTransform>();
-        points = 0;
-        damagedCount = 0;
         originalDelta = rectTransform.sizeDelta;
+
         UpdateOverlay();
     }
 
@@ -110,7 +117,7 @@ public class PlayerScript : MonoBehaviour
         vertical = Input.GetAxisRaw("Vertical");
         movementDirection = new Vector2(horizontal, vertical).normalized;
 
-        if (movementDirection != Vector2.zero)
+        if (movementDirection != Vector2.zero & !blockScript.blockOn)
         {
             float angle = Mathf.Atan2(movementDirection.y, movementDirection.x) * Mathf.Rad2Deg;
             Quaternion targetRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
@@ -145,7 +152,7 @@ public class PlayerScript : MonoBehaviour
                 colorChange = new Dictionary<Color, Color>
                 {
                     { colorWhite, colorGreen },
-                    { colorGreen, colorWhite },
+                    { colorGreen, colorWhite }
                 };
                 activeColor = colorGreen;
                 render.color = colorGreen;
@@ -210,6 +217,53 @@ public class PlayerScript : MonoBehaviour
                 UpdateOverlay();
                 return;
             }
+            if (collision.gameObject == blueWallAbility)
+            {
+                Destroy(blueWallAbility);
+                hasAbility["BlueWall"] = true;
+                colorChange = new Dictionary<Color, Color>
+                {
+                    { colorWhite, colorGreen },
+                    { colorGreen, colorRed },
+                    { colorRed, colorBlue },
+                    { colorBlue, colorWhite }
+                };
+                activeColor = colorBlue;
+                render.color = colorBlue;
+                renderb.color = colorBlue;
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                runSpeed = 8f;
+                deathCounter = 0;
+                gameManager.Deactivate("FakeWall");
+                GameObject typeP3 = GameObject.Find("Type P3");
+                if (typeP3 != null)
+                {
+                    typeP3.SetActive(false);
+                }
+                UpdateOverlay();
+                return;
+            }
+            string bTAClone = "Blue Teleport Ability(Clone)";
+            if (collision.gameObject.name == bTAClone)
+            {
+                Destroy(collision.gameObject);
+                hasAbility["BlueTeleport"] = true;
+                activeColor = colorBlue;
+                render.color = colorBlue;
+                renderb.color = colorBlue;
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                runSpeed = 8f;
+                deathCounter = 0;
+                UpdateOverlay();
+                return;
+            }
+            string yTAClone = "Yellow Teleport Ability(Clone)";
+            if (collision.gameObject.name == yTAClone)
+            {
+                gameObject.SetActive(false);
+                Destroy(collision.gameObject);
+                gameManager.GameWin();
+            }
         }
     }
 
@@ -219,16 +273,16 @@ public class PlayerScript : MonoBehaviour
         PlayerDamage(other.gameObject);
         if ((other.gameObject.name.Substring(0, 6) == "Health" || other.gameObject.name == "Health(Clone)") & deathCounter != 0)
         {
-            deathCounter-= 1 * Mathf.RoundToInt(other.gameObject.transform.localScale.x);
+            Destroy(other.gameObject);
+            deathCounter -= 1 * Mathf.RoundToInt(other.gameObject.transform.localScale.x);
             deathCounter = deathCounter < 0 ? 0 : deathCounter;
             UpdateOverlay();
-            Destroy(other.gameObject);
         }
     }
 
-    // Color change event.
+        // Color change event.
 
-    void ChangeColor()
+        void ChangeColor()
     {
         PolygonCollider2D playerCollider = GetComponent<PolygonCollider2D>();
         bool isMovingDiagonally = body.velocity.x != 0 && body.velocity.y != 0;
@@ -272,11 +326,11 @@ public class PlayerScript : MonoBehaviour
                 deathCounter++;
                 SpriteRenderer rendereb = obj.GetComponent<SpriteRenderer>();
                 Color enemyBulletColor = rendereb.color;
-                if (enemyBulletColor.r == 1)
+                if (enemyBulletColor.r == 1 && deathCounter < 4)
                 {
                     deathCounter++;
                 }
-                if (enemyBulletColor.b == 1)
+                if (enemyBulletColor.b == 1 && deathCounter < 3)
                 {
                     deathCounter += 2;
                 }
@@ -302,7 +356,7 @@ public class PlayerScript : MonoBehaviour
                         case 5:
                             // Game over event.
                             gameObject.SetActive(false);
-                            FindObjectOfType<GameManager>().GameOver();
+                            gameManager.GameOver();
                             break;
                         default:
                             FlickerOrange();

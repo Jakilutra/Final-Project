@@ -10,7 +10,7 @@ public class TeleportScript : MonoBehaviour
     private GameObject player;
     private PlayerScript playerScript;
     private AttackScript attackScript;
-    [SerializeField] private GameObject bigGreenEnemy;
+    [SerializeField] private GameObject bigGreenEnemy, finalBoss;
     private bool hasSpawned = false;
 
     // Assign variables.
@@ -81,6 +81,14 @@ public class TeleportScript : MonoBehaviour
                     GameObject enemyClone = Instantiate(bigGreenEnemy, new Vector3(-16,10,0), Quaternion.identity);
                     enemyClone.transform.localScale *= 3;
                     hasSpawned = true;
+                    return;
+                }
+                if (teleporterLocation == new Vector3(15.5f, 77f, 0))
+                {
+                    if (finalBoss != null)
+                    {
+                        finalBoss.SetActive(true);
+                    }
                 }
             }
             else

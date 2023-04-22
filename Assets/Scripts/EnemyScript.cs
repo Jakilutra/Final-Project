@@ -15,7 +15,7 @@ public class EnemyScript : MonoBehaviour
     private PlayerScript playerScript;
     private BlockScript blockScript;
     private int deathCounter;
-    private float deathPoint;
+    private float deathPoint, startScale;
     private Vector3 spawnPosition;
     [SerializeField] private GameObject teleportAbility, health;
     private Camera mainCamera;
@@ -37,7 +37,8 @@ public class EnemyScript : MonoBehaviour
         };
         enemyID.TryGetValue(calcColor, out runSpeed);
         deathCounter = 0;
-        deathPoint = Mathf.Pow(transform.localScale.x, 3f) * (runSpeed - 1);
+        startScale = transform.localScale.x;
+        deathPoint = Mathf.Pow(startScale, 3f) * (runSpeed - 1);
         blockScript = GetComponent<BlockScript>();
         mainCamera = Camera.main;
     }
@@ -53,13 +54,32 @@ public class EnemyScript : MonoBehaviour
             float scale = transform.localScale.x;
             Vector3 targetPosition = mainCamera.WorldToViewportPoint(transform.position);
 
-            if (deathCounter > (18 *(runSpeed-1)))
+            if (scale == 2)
             {
-                transform.localScale = new Vector3(2, 2, 1);
                 transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, -runSpeed * Time.deltaTime);
             }
             else if (targetPosition.x >= 0 && targetPosition.x <= 1.2*scale && targetPosition.y >= 0 && targetPosition.y <= 1.2*scale)
             {
+                if ((deathPoint - deathCounter) <= (216 * (runSpeed - 1)) && scale == 7)
+                {
+                    transform.localScale = new Vector3(6, 6, 1);
+                }
+                else if ((deathPoint - deathCounter) <= (125 * (runSpeed - 1)) && scale == 6)
+                {
+                    transform.localScale = new Vector3(5, 5, 1);
+                }
+                else if ((deathPoint - deathCounter) <= (64 * (runSpeed - 1)) && scale == 5)
+                {
+                    transform.localScale = new Vector3(4, 4, 1);
+                }
+                else if ((deathPoint - deathCounter) <= (27 * (runSpeed - 1)) && scale == 4)
+                {
+                    transform.localScale = new Vector3(3, 3, 1);
+                }
+                else if ((deathPoint - deathCounter) <= (8 * (runSpeed - 1)) && scale == 3)
+                {
+                    transform.localScale = new Vector3(2, 2, 1);
+                }
                 transform.position = Vector2.MoveTowards(this.transform.position, Player.transform.position, runSpeed * Time.deltaTime);
             }
         }
@@ -141,15 +161,23 @@ public class EnemyScript : MonoBehaviour
                         };
                         colorID.TryGetValue(calcColor, out string colorName);
                         GameObject abilityClone = Instantiate(teleportAbility, spawnPosition, Quaternion.identity);
-                        abilityClone.GetComponent<SpriteRenderer>().color = enemyColor;
-                        abilityClone.name = colorName + " Teleport Ability(Clone)";
+                        if (this.name == "Final Boss")
+                        {
+                            abilityClone.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            abilityClone.name = "Yellow Teleport Ability(Clone)";
+                        }
+                        else
+                        {
+                            abilityClone.GetComponent<SpriteRenderer>().color = enemyColor;
+                            abilityClone.name = colorName + " Teleport Ability(Clone)";
+                        }
                         return;
                     }
 
                     // Spawn Health from other enemies.
 
                     GameObject healthClone = Instantiate(health, spawnPosition, Quaternion.identity);
-                    healthClone.transform.localScale = new Vector3(scale, scale, scale);
+                    healthClone.transform.localScale = new Vector3(scale, scale, 1);
                 }
             }
         }
